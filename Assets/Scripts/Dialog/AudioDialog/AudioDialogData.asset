@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56baa39bcbd3ef14db16546a78bcc7ba, type: 3}
+  m_Name: AudioDialogData
+  m_EditorClassIdentifier: 
+  <AllSounds>k__BackingField:
+  - {fileID: 8300000, guid: b855af5b23656c0458ac44b24cf4e8b8, type: 3}
+  - {fileID: 8300000, guid: 300f0ad16800ad5468f972b5da26efe8, type: 3}
+  - {fileID: 8300000, guid: 7861d76dd0baa0f45bdb4dacb812ac82, type: 3}
+  - {fileID: 8300000, guid: f09e197956b26d644937395542fa7e0d, type: 3}

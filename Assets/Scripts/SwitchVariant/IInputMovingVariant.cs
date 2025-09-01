@@ -1,0 +1,1 @@
+﻿public interface IInputMovingVariant : IInputUpVariant, IInputDownVariant { }
