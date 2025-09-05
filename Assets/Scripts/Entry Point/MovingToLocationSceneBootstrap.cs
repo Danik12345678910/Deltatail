@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class EntryPoint : MonoBehaviour
+public class MovingToLocationSceneBootstrap : SceneBootstrap
 {
+    private NewInputSystemData _newInputSystemData;
+    private string _name = "Dialog";
     [SerializeField] private DialogController _dialogController;
     [SerializeField] private VariantHandlerController _handlerController;
     [SerializeField] private PlayerNewInputSystem _playerNewInputSystem;
-    private NewInputSystemData _newInputSystemData;
-    private string _name = "Dialog";
 
-    private void Awake()
+    protected override void AdditionallyAwake()
     {
         _newInputSystemData = new NewInputSystemData();
         _newInputSystemData.Enable();
@@ -24,8 +24,8 @@ public class EntryPoint : MonoBehaviour
             gameObject.Initialize(_newInputSystemData.InputInteract);
     }
 
-    private void OnDestroy() 
+    protected override void AdditionallyOnDestroy()
     {
-     _newInputSystemData.Dispose();   
+        _newInputSystemData.Dispose();   
     }
 }

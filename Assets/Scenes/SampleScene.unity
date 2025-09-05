@@ -119,56 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &20291009
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 20291011}
-  - component: {fileID: 20291010}
-  m_Layer: 0
-  m_Name: ServiceLocatorBootstrap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &20291010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 20291009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5067f90af04c8740854cfb7ea980ddd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _services:
-  - {fileID: 300893200}
-  - {fileID: 215095433}
-  - {fileID: 1915637259}
-  - {fileID: 1463483108}
-  - {fileID: 1742084253}
---- !u!4 &20291011
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 20291009}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.3894374, y: -4.848993, z: -9.968593}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &215095431
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +437,7 @@ GameObject:
   - component: {fileID: 599206261}
   - component: {fileID: 599206260}
   m_Layer: 0
-  m_Name: EntryPoint
+  m_Name: Bootstrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,9 +455,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623b98cdb6e2a034cafb10d59f18cbed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _monobehaviorServices:
+  - {fileID: 300893200}
+  - {fileID: 215095433}
+  - {fileID: 1915637259}
+  - {fileID: 1463483108}
+  - {fileID: 1742084253}
+  _contextUpdaters: []
   _dialogController: {fileID: 300893200}
   _handlerController: {fileID: 1443168789}
   _playerNewInputSystem: {fileID: 1915637258}
+  references:
+    version: 2
+    RefIds: []
 --- !u!4 &599206261
 Transform:
   m_ObjectHideFlags: 0
@@ -1366,98 +1326,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _actions:
-  - rid: 467486647467376741
+  - rid: 7765186579296682076
   references:
     version: 2
     RefIds:
-    - rid: 467486647467376741
+    - rid: 7765186579296682076
       type: {class: SequenceInteractionAction, ns: , asm: Assembly-CSharp}
       data:
         _listInteractionsActions:
-        - rid: 467486647467376746
-        - rid: 467486647467376748
-        - rid: 467486647467376749
-        - rid: 467486647467376750
-        - rid: 467486647467376751
-        - rid: 467486647467376752
-        - rid: 467486647467376753
-        - rid: 467486647467376754
-        - rid: 467486647467376755
-        - rid: 467486647467376756
-        - rid: 467486647467376760
-        - rid: 467486647467376757
-    - rid: 467486647467376746
+        - rid: 7765186579296682077
+        - rid: 7765186579296682078
+        - rid: 7765186579296682079
+    - rid: 7765186579296682077
+      type: {class: DialogInteractionAction, ns: , asm: Assembly-CSharp}
+      data:
+        _dialog: {fileID: 11400000, guid: b8afc6d527e74cd48ab1dd060774b3ee, type: 2}
+    - rid: 7765186579296682078
       type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
       data:
-        _targetMovement: {x: -1, y: 0}
+        _targetMovement: {x: -5, y: 0}
         _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376748
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
+        _speed: 10
+    - rid: 7765186579296682079
+      type: {class: DialogInteractionAction, ns: , asm: Assembly-CSharp}
       data:
-        _targetMovement: {x: 0, y: 1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376749
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 1, y: -1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376750
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 0, y: -1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376751
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: -1, y: 0}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376752
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 1, y: 1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376753
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 0, y: 1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376754
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 1, y: 0}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376755
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: -1, y: -1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376756
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 1, y: 0}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376757
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: -1, y: 1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
-    - rid: 467486647467376760
-      type: {class: MovementInteractionAction, ns: , asm: Assembly-CSharp}
-      data:
-        _targetMovement: {x: 0, y: -1}
-        _transform: {fileID: 1869681854}
-        _speed: 5
+        _dialog: {fileID: 11400000, guid: c2909c51756ec6b42841207b779dd5a9, type: 2}
 --- !u!70 &1869681853
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1825,7 +1718,6 @@ SceneRoots:
   - {fileID: 599206261}
   - {fileID: 1518167394}
   - {fileID: 215095432}
-  - {fileID: 20291011}
   - {fileID: 1915637257}
   - {fileID: 1869681854}
   - {fileID: 1443168790}

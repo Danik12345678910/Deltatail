@@ -6,6 +6,7 @@ public class ServiceLocator
     private Dictionary<Type, IService> _serviceMap = new Dictionary<Type, IService>();
     static public ServiceLocator Current { get; private set; }
     static public void Initialize() => Current = new ServiceLocator();
+    static public void Disable() => Current = null;
     public T GetService<T>() where T : IService
     {
         var key = typeof(T);
@@ -37,5 +38,4 @@ public class ServiceLocator
     }
 
     private void ThrowError(string message) => throw new InvalidOperationException($"{typeof(ServiceLocator)}: {message}");
-
 }

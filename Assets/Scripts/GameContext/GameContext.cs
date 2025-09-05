@@ -2,27 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameContext : MonoBehaviour
+public class GameContext : MonoBehaviourService
 {
-    public const string tagGameContext = "GameContext";
+    private Dictionary<Type, IGameContextData> _contextsMap = new Dictionary<Type, IGameContextData>();
 
-    private Dictionary<Type, IGameContext> _contextsMap = new Dictionary<Type, IGameContext>();
-    private EventBus _eventBus;
+    public override Type ServiceType => GetType();
 
     private void Awake()
     {
-        if (tag != tagGameContext)
-            throw new InvalidOperationException("Игровой тег не равен тегу объекта");
-
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
-    }
-
-    public void WriteContext<T>(T context) where T : IGameContext
+    public void WriteContext<T>(T context) where T : IGameContextData
     {
         var key = typeof(T);
 
@@ -32,7 +23,7 @@ public class GameContext : MonoBehaviour
             _contextsMap.Add(key, context);
     }
 
-    public T ReadContext<T>() where T : IGameContext
+    public T ReadContext<T>() where T : IGameContextData
     {
         var key = typeof(T);
 
