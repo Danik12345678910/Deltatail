@@ -1,48 +1,42 @@
 using System;
 using UnityEngine;
 using MackySoft.SerializeReferenceExtensions;
+using UnityEditor.SceneManagement;
 
-public class InteractGameObject : MonoBehaviour
+abstract public class InteractGameObject : MonoBehaviour
 {
-    private bool _isPlayerCollision;
     private bool _isInteracting;
     private int _currentInteractionIndex;
-    private IInteractInput _interactInput;
+    
     [SerializeReference, SubclassSelector] private InteractionActionEndingHandler[] _actions;
 
     private EventBus _eventBus;
 
-    public void Initialize(IInteractInput interactInput)
+    protected PlayerTouchCurrentGameObjectDetect _touchDetect;
+     
+    protected virtual void Awake()
+    {
+        _touchDetect = GetComponent<PlayerTouchCurrentGameObjectDetect>();
+        if (_touchDetect == null)
+            throw new NullReferenceException("Отсутствует детектор коллизии");
+    }
+
+    protected virtual void Start()
     {
         _eventBus = ServiceLocator.Current.GetService<EventBus>();
-        _interactInput = interactInput;
-        _interactInput.OnInput += Interact;
 
         foreach (var action in _actions)
             action.Initialize();
 
         foreach (var action in _actions)
             action.OnEndingAction += DisableAction;
+
+        _touchDetect.Initialize(ServiceLocator.Current.GetService<PlayerDataService>().gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected void Interact()
     {
-        if (collision.gameObject.TryGetComponent(out PlayerDataService playerData))
-            SetPlayerCollision();
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent(out PlayerDataService playerData))
-            UnsetPlayerCollision();
-    }
-
-    private void SetPlayerCollision() => _isPlayerCollision = true;
-    private void UnsetPlayerCollision() => _isPlayerCollision = false;
-
-    private void Interact()
-    {
-        if(_isPlayerCollision && !_isInteracting)
+        if(!_isInteracting)
         {
             EnableAction();
 
@@ -64,10 +58,8 @@ public class InteractGameObject : MonoBehaviour
         _isInteracting = false;   
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
-        _interactInput.OnInput -= Interact;
-
         foreach (var action in _actions)
             action.OnEndingAction -= DisableAction;
 

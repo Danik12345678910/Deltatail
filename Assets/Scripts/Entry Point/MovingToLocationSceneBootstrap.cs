@@ -19,9 +19,7 @@ public class MovingToLocationSceneBootstrap : SceneBootstrap
 
         _handlerController.Initialize(_newInputSystemData.MovingVariant);
 
-        InteractGameObject[] interactGameObjects = FindObjectsByType<InteractGameObject>(FindObjectsSortMode.None);
-        foreach (var gameObject in interactGameObjects)
-            gameObject.Initialize(_newInputSystemData.InputInteract);
+        ServiceLocator.Current.Register<IInteractInput>((IInteractInput)_newInputSystemData.InputInteract);
     }
 
     protected override void AdditionallyOnDestroy()

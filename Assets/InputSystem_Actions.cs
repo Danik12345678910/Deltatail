@@ -46,7 +46,7 @@ using UnityEngine.InputSystem.Utilities;
 ///
 ///     void OnEnable()
 ///     {
-///         m_Player.Enable();                                // Enable all actions within map.
+///         m_Player.IsTrigger();                                // IsTrigger all actions within map.
 ///     }
 ///
 ///     void OnDisable()

@@ -11,18 +11,18 @@ public abstract class SceneBootstrap : MonoBehaviour
     protected void Awake()
     {
         ServiceLocator.Initialize();
-        var gameContext = FindFirstObjectByType<GameContext>();
+        //var gameContext = FindFirstObjectByType<GameContext>();
 
-        ServiceLocator.Current.Register(gameContext);
+        //ServiceLocator.Current.Register(gameContext);
 
         foreach (var service in _monobehaviorServices)
             ServiceLocator.Current.Register(service);
 
-        foreach (var contextUpdater in _contextUpdaters)
-            contextUpdater.Initialize();
+        //foreach (var contextUpdater in _contextUpdaters)
+        //    contextUpdater.Initialize();
 
-        foreach (var contextUpdater in _contextUpdaters)
-            contextUpdater.SubscribeToWriteContext();
+        //foreach (var contextUpdater in _contextUpdaters)
+        //    contextUpdater.SubscribeToWriteContext();
 
         AdditionallyAwake();
     }
