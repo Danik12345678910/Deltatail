@@ -2,12 +2,10 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class DialogController : MonoBehaviourService
+abstract public class DialogController : MonoBehaviourService
 {
     [SerializeField] private GameObject _dialogBar;
-    [SerializeField] private Image _dialogSpriteCharacter;
     [SerializeField] private TMP_Text _dialogText;
     private AudioContainer _dialogAudio;
 
@@ -18,23 +16,30 @@ public class DialogController : MonoBehaviourService
 
     public override Type ServiceType => GetType();
 
-    private IAllWritingPage _currentAllWritingPage;
     private ISkipDialogPage _currentSkipDialogPage;
 
     private EventBus _eventBus;
 
-    private Coroutine _writingCoroutine;
+    protected Coroutine WritingCoroutineReference { private set; get; }
 
-    public void Initialize(ISkipDialogPage skipDialog, IAllWritingPage allWritingPage, string audioKey)
+    protected event Action OnStartedDialog;
+
+
+    private void Awake()
+    {
+        DisactivateDialogBar();
+    }
+
+    private void Start()
     {
         _eventBus = ServiceLocator.Current.GetService<EventBus>();
+    }
 
-        DisactivateDialogBar();
+    public void Initialize(ISkipDialogPage skipDialog, string audioKey)
+    {
         _dialogAudio.Initialize(audioKey);
         _currentSkipDialogPage = skipDialog;
-        _currentAllWritingPage = allWritingPage;
 
-        _currentAllWritingPage.OnWriteAllDialogPage += WriteAllPage;
         _currentSkipDialogPage.OnSkipDialogPage += SkipDialogPage;
     }
 
@@ -44,8 +49,8 @@ public class DialogController : MonoBehaviourService
         {
             _dialogText.text = _currentDialog.DialogPages[_currentPageIndex];
             _isEndingPageDialog = true;
-            StopCoroutine(_writingCoroutine);
-            _writingCoroutine = null;
+            StopCoroutine(WritingCoroutineReference);
+            WritingCoroutineReference = null;
         }
     }
     private void SkipDialogPage()
@@ -69,18 +74,14 @@ public class DialogController : MonoBehaviourService
 
             Validate();
 
+            OnStartedDialog?.Invoke();
+
             _isContinuationOfDialogueNow = true;
             _eventBus.Invoke(new DialogStartedSignal());
 
             ActivateDialogBar();
-            SetStartingDialog();
+            SetDialogInDialogTextCurrentPage();
         }
-    }
-
-    private void SetStartingDialog()
-    {
-        SetCharacterSprite();
-        SetDialogInDialogTextCurrentPage();
     }
 
     private void Validate()
@@ -106,18 +107,18 @@ public class DialogController : MonoBehaviourService
         DisactivateDialogBar();
         _isContinuationOfDialogueNow = false;
 
-        if (_writingCoroutine != null)
-            StopCoroutine(_writingCoroutine);
+        if (WritingCoroutineReference != null)
+            StopCoroutine(WritingCoroutineReference);
 
         _eventBus.Invoke(new DialogEndedSignal());
     }
 
     private void SetDialogInDialogTextCurrentPage()
     {
-        if (_writingCoroutine != null)
-            StopCoroutine(_writingCoroutine);
+        if (WritingCoroutineReference != null)
+            StopCoroutine(WritingCoroutineReference);
 
-        _writingCoroutine = StartCoroutine(WritingCoroutine());
+        WritingCoroutineReference = StartCoroutine(WritingCoroutine());
     }
 
     private IEnumerator WritingCoroutine()
@@ -144,7 +145,6 @@ public class DialogController : MonoBehaviourService
         _isEndingPageDialog = true;
     }
 
-    private void SetCharacterSprite() => _dialogSpriteCharacter.sprite = _currentDialog.Sprite;
     private void ActivateDialogBar() => _dialogBar.SetActive(true);
     private void DisactivateDialogBar() => _dialogBar.SetActive(false);
 
@@ -152,8 +152,5 @@ public class DialogController : MonoBehaviourService
     {
         if (_currentSkipDialogPage != null)
             _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
-
-        if (_currentAllWritingPage != null)
-            _currentAllWritingPage.OnWriteAllDialogPage -= WriteAllPage;
     }
 }

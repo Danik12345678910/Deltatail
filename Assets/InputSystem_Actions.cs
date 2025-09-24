@@ -46,7 +46,7 @@ using UnityEngine.InputSystem.Utilities;
 ///
 ///     void OnEnable()
 ///     {
-///         m_Player.IsTrigger();                                // IsTrigger all actions within map.
+///         m_Player.Enable();                                // Enable all actions within map.
 ///     }
 ///
 ///     void OnDisable()
@@ -225,7 +225,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fbf8e2dc-55ca-4a99-9916-7aadfb8cd2ba"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -256,6 +256,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""488e87b6-fdfc-4a64-9db0-be12cec379fa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -278,6 +287,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59999838-0fe4-4a60-a3c2-892c02583a14"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -361,6 +381,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_VariantHandler = asset.FindActionMap("VariantHandler", throwIfNotFound: true);
         m_VariantHandler_Up = m_VariantHandler.FindAction("Up", throwIfNotFound: true);
         m_VariantHandler_Down = m_VariantHandler.FindAction("Down", throwIfNotFound: true);
+        m_VariantHandler_Enter = m_VariantHandler.FindAction("Enter", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -745,6 +766,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<IVariantHandlerActions> m_VariantHandlerActionsCallbackInterfaces = new List<IVariantHandlerActions>();
     private readonly InputAction m_VariantHandler_Up;
     private readonly InputAction m_VariantHandler_Down;
+    private readonly InputAction m_VariantHandler_Enter;
     /// <summary>
     /// Provides access to input actions defined in input action map "VariantHandler".
     /// </summary>
@@ -764,6 +786,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "VariantHandler/Down".
         /// </summary>
         public InputAction @Down => m_Wrapper.m_VariantHandler_Down;
+        /// <summary>
+        /// Provides access to the underlying input action "VariantHandler/Enter".
+        /// </summary>
+        public InputAction @Enter => m_Wrapper.m_VariantHandler_Enter;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -796,6 +822,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Down.started += instance.OnDown;
             @Down.performed += instance.OnDown;
             @Down.canceled += instance.OnDown;
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
         }
 
         /// <summary>
@@ -813,6 +842,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Down.started -= instance.OnDown;
             @Down.performed -= instance.OnDown;
             @Down.canceled -= instance.OnDown;
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
         }
 
         /// <summary>
@@ -984,5 +1016,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Enter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEnter(InputAction.CallbackContext context);
     }
 }

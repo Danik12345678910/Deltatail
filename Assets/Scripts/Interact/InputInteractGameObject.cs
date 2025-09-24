@@ -11,7 +11,10 @@
     private void InteractCollisionPlayerCheck()
     {
         if (_isPlayerCollision)
+        {
             Interact();
+            _isPlayerCollision = false;
+        }
     }
 
     private void UnsetIsPlayerCollision()

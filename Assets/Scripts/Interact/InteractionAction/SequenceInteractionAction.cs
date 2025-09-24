@@ -6,7 +6,7 @@ public class SequenceInteractionAction : InteractionActionEndingHandler
 {
     [SerializeReference, SubclassSelector] private InteractionActionEndingHandler[] _listInteractionsActions;
 
-    public override event Action OnEndingAction;
+    public override event System.Action OnEndingAction;
     private bool _isSubscribed;
 
     public override void Initialize()

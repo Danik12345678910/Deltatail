@@ -3,5 +3,5 @@ using UnityEditor;
 
 public interface IInteractInput : IService
 {
-    event Action OnInput;
+    event System.Action OnInput;
 }

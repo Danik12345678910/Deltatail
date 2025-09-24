@@ -1,11 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MonsterBattleData", menuName = "Scriptable Objects/MonsterBattleData")]
+[CreateAssetMenu(fileName = "Monsters", menuName = "Scriptable Objects/Monsters")]
 public class MonsterBattleData : ScriptableObject
 {
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public AnimationClip Animation { get; private set; }
-    [field: SerializeField] public AudioClip BattleClip { get; private set; }
-    [field: SerializeField] public Health Health { get; private set; }
-    [field: SerializeField] public AttackData[] AttackDates { get; private set; }
+    [field : SerializeReference, SubclassSelector] public MonsterPhaseBattleData[] Phases {  get; private set; }
+    [field: SerializeReference, SubclassSelector] public IIsTransitionNextPhaseCondition[] condition { get; private set; }
 }

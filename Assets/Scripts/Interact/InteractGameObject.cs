@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using MackySoft.SerializeReferenceExtensions;
-using UnityEditor.SceneManagement;
 
 abstract public class InteractGameObject : MonoBehaviour
 {

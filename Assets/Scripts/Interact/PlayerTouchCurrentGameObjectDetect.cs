@@ -3,8 +3,8 @@ using UnityEngine;
 
 abstract public class PlayerTouchCurrentGameObjectDetect : MonoBehaviour
 {
-    abstract public event Action OnCollisionEnter;
-    abstract public event Action OnCollisionExit;
+    abstract public event System.Action OnCollisionEnter;
+    abstract public event System.Action OnCollisionExit;
     abstract public bool IsTrigger { get; }
     protected GameObject _playerGameObject;
 

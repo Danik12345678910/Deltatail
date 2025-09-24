@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class SceneBootstrap : MonoBehaviour 
+public abstract class SceneBootstrap : MonoBehaviour
 {
 
     [Header("Сервисы передаваемые классу " + nameof(ServiceLocator))]
@@ -8,34 +8,39 @@ public abstract class SceneBootstrap : MonoBehaviour
 
     [SerializeReference, SubclassSelector] private IContextUpdater[] _contextUpdaters;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         ServiceLocator.Initialize();
-        //var gameContext = FindFirstObjectByType<GameContext>();
 
-        //ServiceLocator.Current.Register(gameContext);
+        var sceneTransition = FindFirstObjectByType<SceneTransitionController>();
+
+        ServiceLocator.Current.Register(sceneTransition);
+
+        if (_contextUpdaters != null)
+        {
+            var gameContext = FindFirstObjectByType<GameContext>();
+            ServiceLocator.Current.Register(gameContext);
+
+            foreach (var contextUpdater in _contextUpdaters)
+                contextUpdater.Initialize();
+
+            foreach (var contextUpdater in _contextUpdaters)
+                contextUpdater.SubscribeToWriteContext();
+        }
 
         foreach (var service in _monobehaviorServices)
             ServiceLocator.Current.Register(service);
 
-        //foreach (var contextUpdater in _contextUpdaters)
-        //    contextUpdater.Initialize();
-
-        //foreach (var contextUpdater in _contextUpdaters)
-        //    contextUpdater.SubscribeToWriteContext();
-
-        AdditionallyAwake();
+        foreach (var contextUpdater in _contextUpdaters)
+            contextUpdater.Initialize();
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         ServiceLocator.Disable();
-        AdditionallyOnDestroy();
 
-        foreach (var contextUpdater in _contextUpdaters)
-            contextUpdater.UnsubscribeToWriteContext();
+        if(_contextUpdaters != null)
+            foreach (var contextUpdater in _contextUpdaters)
+                contextUpdater.UnsubscribeToWriteContext();
     }
-
-    protected abstract void AdditionallyAwake();
-    protected abstract void AdditionallyOnDestroy();
 }

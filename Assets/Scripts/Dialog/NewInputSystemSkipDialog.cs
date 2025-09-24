@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NewInputSystemSkipDialog : ISkipDialogPage
 {
-    public event Action OnSkipDialogPage;
+    public event System.Action OnSkipDialogPage;
     private InputSystem_Actions _inputs;
 
     public void Initialize(InputSystem_Actions inputs) => _inputs = inputs;     

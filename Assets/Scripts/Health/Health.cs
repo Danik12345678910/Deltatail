@@ -1,25 +1,39 @@
-using UnityEngine;
+using System;
 
-abstract public class Health
+public class Health
 {
-    [field : SerializeField] public int CurrentHeath {  get; protected set; }  
+    public int CurrentHeath {  get; private set; }
+    public int MaxHeath {  get; private set; }
+    public event Action OnDie;
+    public bool IsAlive => CurrentHeath > 0;
     
     public void Damage(int damage)
     {
-        if (CurrentHeath - damage > 0)
+        if(IsAlive)
         {
-            CurrentHeath -= damage;
-            DeathDetect();
+            if (CurrentHeath - damage > 0)
+            {
+                CurrentHeath -= damage;
+                DeathDetect();
+            }
+            else
+                OnDie?.Invoke();
         }
-        else
-            Death();
     }
 
+    public Health(int health)
+    { CurrentHeath = health; }
+
+    public void Heal(int heal)
+    {
+        if (IsAlive && MaxHeath >= CurrentHeath + heal)
+            CurrentHeath += heal;
+        else if(MaxHeath < CurrentHeath - heal)
+            CurrentHeath = MaxHeath;
+    }
     private void DeathDetect()
     {
         if (CurrentHeath > 0)
-            Death();
+            OnDie?.Invoke();
     }
-
-    abstract protected void Death();
 }

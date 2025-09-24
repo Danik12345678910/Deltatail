@@ -2,5 +2,5 @@
 
 public interface ISkipDialogPage
 {
-    event Action OnSkipDialogPage;
+    event System.Action OnSkipDialogPage;
 }

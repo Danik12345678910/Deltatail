@@ -2,5 +2,5 @@
 
 public interface IAllWritingPage
 {
-    event Action OnWriteAllDialogPage;
+    event System.Action OnWriteAllDialogPage;
 }

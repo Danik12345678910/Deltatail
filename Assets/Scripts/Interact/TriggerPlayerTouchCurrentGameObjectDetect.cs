@@ -5,8 +5,8 @@ public class TriggerPlayerTouchCurrentGameObjectDetect : PlayerTouchCurrentGameO
 {
     public override bool IsTrigger => true;
 
-    public override event Action OnCollisionEnter;
-    public override event Action OnCollisionExit;
+    public override event System.Action OnCollisionEnter;
+    public override event System.Action OnCollisionExit;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

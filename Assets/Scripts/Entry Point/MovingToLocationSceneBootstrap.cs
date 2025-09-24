@@ -4,12 +4,14 @@ public class MovingToLocationSceneBootstrap : SceneBootstrap
 {
     private NewInputSystemData _newInputSystemData;
     private string _name = "Dialog";
-    [SerializeField] private DialogController _dialogController;
+    [SerializeField] private MovingLocationDialogController _dialogController;
     [SerializeField] private VariantHandlerController _handlerController;
     [SerializeField] private PlayerNewInputSystem _playerNewInputSystem;
 
-    protected override void AdditionallyAwake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _newInputSystemData = new NewInputSystemData();
         _newInputSystemData.Enable();
         
@@ -17,13 +19,15 @@ public class MovingToLocationSceneBootstrap : SceneBootstrap
 
         _playerNewInputSystem.Initialize(_newInputSystemData.InputActions);
 
-        _handlerController.Initialize(_newInputSystemData.MovingVariant);
+        _handlerController.Initialize(_newInputSystemData.MovingVariant, _newInputSystemData.ActivateVariant);
 
         ServiceLocator.Current.Register<IInteractInput>((IInteractInput)_newInputSystemData.InputInteract);
     }
 
-    protected override void AdditionallyOnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         _newInputSystemData.Dispose();   
     }
 }

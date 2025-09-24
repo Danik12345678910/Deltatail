@@ -8,6 +8,7 @@ public class Area : MonoBehaviourService
     private Transform _transform;
     private AreaData _currentData;
     private Bounds _bounds;
+    private EventBus _eventBus;
 
     public override Type ServiceType => typeof(Area);
 

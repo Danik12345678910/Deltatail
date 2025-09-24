@@ -4,11 +4,11 @@ public class Test : MonoBehaviour
 {
     [SerializeField] private DialogData _first;
     [SerializeField] private DialogData _two;
-    private DialogController _controller;
+    private MovingLocationDialogController _controller;
 
     private void Start()
     {
-        _controller = ServiceLocator.Current.GetService<DialogController>();
+        _controller = ServiceLocator.Current.GetService<MovingLocationDialogController>();
     }
 
     private void Update()

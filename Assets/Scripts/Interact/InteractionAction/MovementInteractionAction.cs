@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class MovementInteractionAction : InteractionActionEndingHandler
 {
-    public override event Action OnEndingAction;
+    public override event System.Action OnEndingAction;
     [SerializeField] private Vector2 _targetMovement;
     [SerializeField] private Transform _transform;
     [SerializeField] private float _speed;

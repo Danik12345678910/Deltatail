@@ -5,7 +5,7 @@ public class NewInputSystemInputInteract : IInteractInput, IService
 {
     public Type ServiceType => typeof(IInteractInput);
 
-    public event Action OnInput;
+    public event System.Action OnInput;
 
     public void Initialize(InputSystem_Actions input)
     {

@@ -6,11 +6,11 @@ public class DialogInteractionAction : InteractionActionEndingHandler
 {
     [SerializeField] private DialogData _dialog;
 
-    private event Action OnSubscribeHandler;
+    private event System.Action OnSubscribeHandler;
     private bool _isSubscribed;
     private EventBus _eventBus;
 
-    public override event Action OnEndingAction;
+    public override event System.Action OnEndingAction;
     
 
     public override void Initialize()
@@ -57,7 +57,7 @@ public class DialogInteractionAction : InteractionActionEndingHandler
 
     public override void Action()
     {
-        var dialogController = ServiceLocator.Current.GetService<DialogController>();
+        var dialogController = ServiceLocator.Current.GetService<MovingLocationDialogController>();
         Subscribe();
         dialogController.StartDialog(_dialog);
     }

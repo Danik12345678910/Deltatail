@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NewInputSystemWriteAllDialogPage : IAllWritingPage
 {
-    public event Action OnWriteAllDialogPage;
+    public event System.Action OnWriteAllDialogPage;
 
     private InputSystem_Actions _inputs;
 

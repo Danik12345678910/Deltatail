@@ -16,6 +16,16 @@ public class FSM<T> where T : State
         CurrentState.Enter();
     }
 
+    public void SetCurrentState(Type key)
+    {
+        if (CurrentState != null)
+            CurrentState.Exit();
+
+        CurrentState = GetState(key);
+
+        CurrentState.Enter();
+    }
+
     public void Initialize(params T[] values) 
     {
         _stateMap = new Dictionary<Type, T>();
@@ -44,5 +54,14 @@ public class FSM<T> where T : State
 
         return _stateMap[key];
     }
+
+    private T GetState(Type key) 
+    {
+        if (!_stateMap.ContainsKey(key))
+            throw new InvalidOperationException($"Состояние не хранится под ключом {key}.");
+
+        return _stateMap[key];
+    }
+
     public void Update() => CurrentState.Update();
 }

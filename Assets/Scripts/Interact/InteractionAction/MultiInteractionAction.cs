@@ -6,7 +6,7 @@ public class MultiInteractionAction : InteractionActionEndingHandler
 {
     [SerializeReference, SubclassSelector] private InteractionAction[] _listInteractionsActions;
 
-    public override event Action OnEndingAction;
+    public override event System.Action OnEndingAction;
 
     public override void Initialize()
     {
