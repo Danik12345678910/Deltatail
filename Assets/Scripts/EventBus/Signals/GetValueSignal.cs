@@ -1,4 +1,4 @@
-﻿abstract public class GetValueSignal<T> : ISignal
+﻿public class GetValueSignal<T> : ISignal
 {
     public T Value { get; private set; }
 

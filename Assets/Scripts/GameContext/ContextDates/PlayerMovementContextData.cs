@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovementContextData : GameContextData<Vector2>
+public class PlayerMovementContextData : GameContextData<PlayerMoveData>
 {
-    public PlayerMovementContextData(Vector2 playerPosition) : base(playerPosition) { }
+    public PlayerMovementContextData(PlayerMoveData playerPosition) : base(playerPosition) { }
 }

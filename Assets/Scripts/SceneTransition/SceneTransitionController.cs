@@ -18,5 +18,5 @@ public class SceneTransitionController : MonoBehaviourService
         DontDestroyOnLoad(gameObject);
     }
 
-    public override Type ServiceType => throw new NotImplementedException();
+    public override Type ServiceType => GetType();
 }

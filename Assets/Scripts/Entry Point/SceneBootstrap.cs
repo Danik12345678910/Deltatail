@@ -19,10 +19,11 @@ public abstract class SceneBootstrap : MonoBehaviour
         if (_contextUpdaters != null)
         {
             var gameContext = FindFirstObjectByType<GameContext>();
+            var eventBus = FindFirstObjectByType<EventBus>();
             ServiceLocator.Current.Register(gameContext);
 
             foreach (var contextUpdater in _contextUpdaters)
-                contextUpdater.Initialize();
+                contextUpdater.Initialize(eventBus, gameContext);
 
             foreach (var contextUpdater in _contextUpdaters)
                 contextUpdater.SubscribeToWriteContext();
@@ -30,9 +31,6 @@ public abstract class SceneBootstrap : MonoBehaviour
 
         foreach (var service in _monobehaviorServices)
             ServiceLocator.Current.Register(service);
-
-        foreach (var contextUpdater in _contextUpdaters)
-            contextUpdater.Initialize();
     }
 
     protected virtual void OnDestroy()
