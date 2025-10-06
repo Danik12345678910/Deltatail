@@ -5,13 +5,11 @@ using UnityEngine;
 public class AudioController : MonoBehaviourService
 {
     private Dictionary<string, Audio> _audiosMap = new Dictionary<string, Audio>();
-    public Audio MainAudio { get; private set; }
+    public IMainSoundPlayable MainAudio { get; private set; }
 
     private void Awake()
     {
-        string mainName = "Main";
-        Register(mainName);
-        MainAudio = GetAudioToName(mainName);
+        MainAudio.StartSound();
     }
 
     public void Register(string name)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using TMPro;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -9,6 +10,7 @@ public class Area : MonoBehaviourService
     private AreaData _currentData;
     private Bounds _bounds;
     private EventBus _eventBus;
+    [SerializeField] private float _delayChangeSizeInSeconds;
 
     public override Type ServiceType => typeof(Area);
 
@@ -33,9 +35,14 @@ public class Area : MonoBehaviourService
         return point;
     }
 
-    public void SetSize(Vector2 newSize)
+    public void SetSize(Vector2 newSize, float speed = 0.2f)
     {
-        _transform.localScale = newSize;
+        StartCoroutine(ChangeSizeCoroutine());
+        IEnumerator ChangeSizeCoroutine()
+        {
+            _transform.localScale = Vector2.Lerp(_transform.position, newSize, speed);
+            yield return new WaitForSeconds(_delayChangeSizeInSeconds);
+        }
     }
 
     public void SetPosition(Vector2 position)
