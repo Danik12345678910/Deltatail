@@ -4,7 +4,7 @@ public class MovingToLocationSceneBootstrap : SceneBootstrap
 {
     private NewInputSystemData _newInputSystemData;
     private string _name = "Dialog";
-    [SerializeField] private MovingLocationDialogController _dialogController;
+    [SerializeField] private DialogController _dialogController;
     [SerializeField] private VariantHandlerController _handlerController;
     [SerializeField] private PlayerNewInputSystem _playerNewInputSystem;
 

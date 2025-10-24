@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    [SerializeField] private DialogData _first;
-    [SerializeField] private DialogData _two;
-    private MovingLocationDialogController _controller;
+    [SerializeField] private SecondaryDialogData _first;
+    [SerializeField] private MainPersonDialogData _two;
+    private DialogController _controller;
 
     private void Start()
     {
-        _controller = ServiceLocator.Current.GetService<MovingLocationDialogController>();
+        _controller = ServiceLocator.Current.GetService<DialogController>();
     }
 
     private void Update()

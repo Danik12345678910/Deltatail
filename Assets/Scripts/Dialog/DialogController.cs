@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-abstract public class DialogController : MonoBehaviourService
+public class DialogController : MonoBehaviourService, IDialogStartable<MainPersonDialogData>, IDialogStartable<SecondaryDialogData>
 {
     [SerializeField] private GameObject _dialogBar;
     [SerializeField] private TMP_Text _dialogText;
@@ -65,7 +65,7 @@ abstract public class DialogController : MonoBehaviourService
         }
     }
 
-    public void StartDialog(DialogData dialog)
+    public void StartDialog(MainPersonDialogData dialog)
     {
         if (!_isContinuationOfDialogueNow)
         {
@@ -152,5 +152,24 @@ abstract public class DialogController : MonoBehaviourService
     {
         if (_currentSkipDialogPage != null)
             _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
+    }
+
+    public void StartDialog(SecondaryDialogData data)
+    {
+        if (!_isContinuationOfDialogueNow)
+        {
+            _currentPageIndex = 0;
+            _currentDialog = data;
+
+            Validate();
+
+            OnStartedDialog?.Invoke();
+
+            _isContinuationOfDialogueNow = true;
+            _eventBus.Invoke(new DialogStartedSignal());
+
+            ActivateDialogBar();
+            SetDialogInDialogTextCurrentPage();
+        }
     }
 }
