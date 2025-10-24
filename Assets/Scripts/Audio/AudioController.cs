@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class AudioController : MonoBehaviourService
 {
@@ -12,20 +14,20 @@ public class AudioController : MonoBehaviourService
         MainAudio.StartSound();
     }
 
-    public void Register(string name)
+    public bool ContainsAudio(string name) => _audiosMap.ContainsKey(name);
+
+    public Audio RegisterAudio(string name)
     {
         if (_audiosMap.ContainsKey(name))
-        {
-            Debug.LogError($"{typeof(AudioController)}: ");
-            return;
-        }
+            throw new InvalidOperationException($"{typeof(AudioController)}: имя уже занято");
 
         Audio newAudio = new Audio();
         newAudio.Initialize(gameObject);
         _audiosMap.Add(name, newAudio);
+        return newAudio;
     }
 
-    public Audio GetAudioToName(string name)
+    public Audio GetAudio(string name)
     {
         if (_audiosMap.ContainsKey(name))
             return _audiosMap[name];
@@ -69,6 +71,7 @@ public class AudioController : MonoBehaviourService
         }
 
         private AudioSource _source;
+        public event Action OnEndingClip;
 
         public void Initialize(GameObject gameObject, AudioClip clip, bool loop, float volume, float pitch)
         {
@@ -114,7 +117,17 @@ public class AudioController : MonoBehaviourService
         private void SetPitch() => _source.pitch = Pitch;
         private void SetLoop() => _source.loop = Loop;
 
-        public void Play() => _source.Play();
+        public void Play()
+        {
+            var starterCoroutine = ServiceLocator.Current.GetService<StarterCoroutine>();
+            starterCoroutine.StartCoroutine(EndingHandlerCoroutine(Clip));
+            _source.Play();
+        }
+        private IEnumerator EndingHandlerCoroutine(AudioClip clip)
+        {
+            yield return new WaitForSeconds(clip.length);
+            OnEndingClip?.Invoke();
+        }
         public void PlayOneShot(AudioClip clip) => _source.PlayOneShot(clip);
     }
 }
@@ -130,7 +143,7 @@ public struct AudioContainer
         if (audioController == null)
             throw new InvalidOperationException("Инициализация вызвана слишком рано");
 
-        audioController.Register(key);
+        audioController.RegisterAudio(key);
     }
 
     public void Initialize(string key)
@@ -142,6 +155,6 @@ public struct AudioContainer
         if (audioController == null)
             throw new InvalidOperationException("Инициализация вызвана слишком рано");
 
-        Audio = audioController.GetAudioToName(key);
+        Audio = audioController.GetAudio(key);
     }
 }

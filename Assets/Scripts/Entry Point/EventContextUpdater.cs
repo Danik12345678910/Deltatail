@@ -1,6 +1,5 @@
-﻿abstract public class EventContextUpdater<TSignal, TValue> : IContextUpdater where TSignal : GetValueSignal<TValue> //ЕГО Я ДУМАЮ ПООМ ОСТАВЛЮ GENERIC БЕЗ ABSTRACT
+﻿public class EventContextUpdater<TValue> where TValue : IValueEventContext
 {
-    //protected abstract TSignal Signal { get; }
     private EventBus _eventBus;
     private GameContext _gameContext;
 
@@ -12,17 +11,19 @@
 
     public void SubscribeToWriteContext()
     {
-        _eventBus.Subscribe<TSignal>(WriteContextByValue);
+        _eventBus.Subscribe<GetValueSignal<TValue>>(WriteContextByValue);
     }
     public void UnsubscribeToWriteContext()
     {
-        _eventBus.Unsubscribe<TSignal>(WriteContextByValue);
+        _eventBus.Unsubscribe<GetValueSignal<TValue>>(WriteContextByValue);
     }
 
-    private void WriteContextByValue(TSignal signal)
+    private void WriteContextByValue(GetValueSignal<TValue> signal)
     {
         var valueContext = signal.Value;
         GameContextData<TValue> context = new GameContextData<TValue>(valueContext);//ПРОБЛЕМНАЯ ТОЧКА, ИЗ-ЗА КОТОРОЙ Я ВПАЛ ВРАЗДУМИЯ!!!!! ВЕДЬ ПО ТАКОМУ ЖЕ ПРИНЦИПУ МОЖНО СДЕЛАТЬ И СИГНАЛ. УБРАВ НАСЛЕДНИКИ(ИНАЧЕ ВСЕ ПОЛЕТИТ)
         _gameContext.WriteContext(context);
     }
 }
+
+public interface IValueEventContext { }
