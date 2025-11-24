@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ecc7a83e2e8aad44be314adddba219c, type: 3}
   m_Name: ZZ
   m_EditorClassIdentifier: 
-  <Sprite>k__BackingField: {fileID: -6545546518901602532, guid: f0aa16abe46ab1b48952113520752729, type: 3}
   <SpeedTextWritingInSeconds>k__BackingField: 0.05
-  <Sound>k__BackingField: {fileID: 11400000, guid: a0f4889d1b893bc49a2583347d7f3539, type: 2}
+  <Sound>k__BackingField: {fileID: 11400000, guid: 633c697ecb7dc3340a55cef15f554364, type: 2}
   <DialogPages>k__BackingField:
   - "\u0427\u0423\u0412\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u0410\u041A"
   - Afdsgdogisaehtfdy

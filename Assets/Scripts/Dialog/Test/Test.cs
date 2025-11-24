@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    [SerializeField] private SecondaryDialogData _first;
+    [SerializeField] private DialogData _first;
     [SerializeField] private MainPersonDialogData _two;
     private DialogController _controller;
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ecc7a83e2e8aad44be314adddba219c, type: 3}
   m_Name: Papayrus
   m_EditorClassIdentifier: 
-  <Sprite>k__BackingField: {fileID: 0}
-  <SpeedTextWritingInSeconds>k__BackingField: 0
-  <Sound>k__BackingField: {fileID: 0}
-  <DialogPages>k__BackingField: []
+  <SpeedTextWritingInSeconds>k__BackingField: 0.5
+  <DialogPages>k__BackingField:
+  - "\u041D\u042C\u042E-\u0425\u0415-\u0425\u0415-\u0425\u0415"
+  - DFGYHUOPLIJHUYGTFRTYUJHJGYHUIJVSHFNZDSVDBFSGIJRDFJVCXBOJDGWISOJFHNIBNGVITRH

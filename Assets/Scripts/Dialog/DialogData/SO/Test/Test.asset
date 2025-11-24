@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9174555a7cc53945957c235c92c148c, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  <SpeedTextWritingInSeconds>k__BackingField: 0.05
+  <Sound>k__BackingField: {fileID: 11400000, guid: 633c697ecb7dc3340a55cef15f554364, type: 2}
+  <DialogPages>k__BackingField:
+  - "\u0442\u0435\u0441\u0442"
+  <Sprite>k__BackingField: {fileID: -6545546518901602532, guid: f0aa16abe46ab1b48952113520752729, type: 3}

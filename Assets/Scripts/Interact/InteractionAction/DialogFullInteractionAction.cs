@@ -2,16 +2,16 @@
 using UnityEngine;
 
 [Serializable]
-public class DialogInteractionAction : InteractionActionEndingHandler
+public class DialogFullInteractionAction : InteractionActionEndingHandler
 {
-    [SerializeField] private DialogData _dialog;
+    [SerializeField] private MainPersonDialogData _dialog;
 
     private event System.Action OnSubscribeHandler;
     private bool _isSubscribed;
     private EventBus _eventBus;
 
     public override event System.Action OnEndingAction;
-    
+
 
     public override void Initialize()
     {
@@ -22,7 +22,7 @@ public class DialogInteractionAction : InteractionActionEndingHandler
 
     private void Subscribe()
     {
-        if (_isSubscribed) 
+        if (_isSubscribed)
             return;
 
         _isSubscribed = true;
@@ -57,7 +57,7 @@ public class DialogInteractionAction : InteractionActionEndingHandler
 
     public override void Action()
     {
-        var dialogController = ServiceLocator.Current.GetService<MovingLocationDialogController>();
+        var dialogController = ServiceLocator.Current.GetService<DialogController>();
         Subscribe();
         dialogController.StartDialog(_dialog);
     }

@@ -1,15 +1,15 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class DialogController : MonoBehaviourService, IDialogStartable<MainPersonDialogData>, IDialogStartable<SecondaryDialogData>
+public class BattleDialogController : MonoBehaviourService, IDialogStartable<BattleDialogData>
 {
     [SerializeField] private GameObject _dialogBar;
     [SerializeField] private TMP_Text _dialogText;
     private AudioContainer _dialogAudio;
 
-    private DialogData _currentDialog;
+    private BattleDialogData _currentDialog;
     private bool _isContinuationOfDialogueNow;
     private bool _isEndingPageDialog;
     private int _currentPageIndex;
@@ -17,12 +17,13 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
     public override Type ServiceType => GetType();
 
     private ISkipDialogPage _currentSkipDialogPage;
+    private IAllWritingPage _allWritingPage;
 
     private EventBus _eventBus;
 
-    protected Coroutine WritingCoroutineReference { private set; get; }
+    private Coroutine _writingCoroutineReference;
 
-    protected event Action OnStartedDialog;
+    //protected event Action OnStartedDialog;
 
 
     private void Awake()
@@ -35,12 +36,14 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         _eventBus = ServiceLocator.Current.GetService<EventBus>();
     }
 
-    public void Initialize(ISkipDialogPage skipDialog, string audioKey)
+    public void Initialize(in ISkipDialogPage skipDialog, in IAllWritingPage allWritingPage, in string audioKey)
     {
         _dialogAudio.Initialize(audioKey);
         _currentSkipDialogPage = skipDialog;
+        _allWritingPage = allWritingPage;
 
         _currentSkipDialogPage.OnSkipDialogPage += SkipDialogPage;
+        _allWritingPage.OnWriteAllDialogPage += WriteAllPage;
     }
 
     private void WriteAllPage()
@@ -49,8 +52,8 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         {
             _dialogText.text = _currentDialog.DialogPages[_currentPageIndex];
             _isEndingPageDialog = true;
-            StopCoroutine(WritingCoroutineReference);
-            WritingCoroutineReference = null;
+            StopCoroutine(_writingCoroutineReference);
+            _writingCoroutineReference = null;
         }
     }
     private void SkipDialogPage()
@@ -65,40 +68,21 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         }
     }
 
-    public void StartDialog(MainPersonDialogData dialog)
-    {
-        if (!_isContinuationOfDialogueNow)
-        {
-            _currentPageIndex = 0;
-            _currentDialog = dialog;
-
-            Validate();
-
-            OnStartedDialog?.Invoke();
-
-            _isContinuationOfDialogueNow = true;
-            _eventBus.Invoke(new DialogStartedSignal());
-
-            ActivateDialogBar();
-            SetDialogInDialogTextCurrentPage();
-        }
-    }
-
-    private void Validate()
+    virtual protected void Validate()
     {
         if (_dialogBar == null)
-            throw new InvalidOperationException("Äèàëîãîâàÿ ïàíåëü (_dialogBar) íå íàçíà÷åíà.");
+            throw new InvalidOperationException("Ð”Ð¸Ð°Ð»Ð¾Ð³Ð¾Ð²Ð°Ñ Ð¿Ð°Ð½ÐµÐ»ÑŒ (_dialogBar) Ð½Ðµ Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð°.");
         if (_currentDialog == null)
-            throw new ArgumentNullException(nameof(_currentDialog), "Äàííûå äèàëîãà ðàâíû null.");
+            throw new ArgumentNullException(nameof(_currentDialog), "Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð´Ð¸Ð°Ð»Ð¾Ð³Ð° Ñ€Ð°Ð²Ð½Ñ‹ null.");
         if (_currentDialog.DialogPages == null)
-            throw new NullReferenceException("Ìàññèâ ñòðàíèö äèàëîãà ðàâåí null.");
+            throw new NullReferenceException("ÐœÐ°ÑÑÐ¸Ð² ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ† Ð´Ð¸Ð°Ð»Ð¾Ð³Ð° Ñ€Ð°Ð²ÐµÐ½ null.");
         if (_currentDialog.DialogPages.Length == 0)
-            throw new InvalidOperationException("Â äèàëîãå íåò ñòðàíèö.");
+            throw new InvalidOperationException("Ð’ Ð´Ð¸Ð°Ð»Ð¾Ð³Ðµ Ð½ÐµÑ‚ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†.");
 
         for (int i = 0; i < _currentDialog.DialogPages.Length; i++)
         {
             if (_currentDialog.DialogPages[i] == null)
-                throw new NullReferenceException($"Ñòðàíèöà äèàëîãà ñ èíäåêñîì {i} ðàâíà null.");
+                throw new NullReferenceException($"Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° Ð´Ð¸Ð°Ð»Ð¾Ð³Ð° Ñ Ð¸Ð½Ð´ÐµÐºÑÐ¾Ð¼ {i} Ñ€Ð°Ð²Ð½Ð° null.");
         }
     }
 
@@ -107,18 +91,18 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         DisactivateDialogBar();
         _isContinuationOfDialogueNow = false;
 
-        if (WritingCoroutineReference != null)
-            StopCoroutine(WritingCoroutineReference);
+        if (_writingCoroutineReference != null)
+            StopCoroutine(_writingCoroutineReference);
 
         _eventBus.Invoke(new DialogEndedSignal());
     }
 
     private void SetDialogInDialogTextCurrentPage()
     {
-        if (WritingCoroutineReference != null)
-            StopCoroutine(WritingCoroutineReference);
+        if (_writingCoroutineReference != null)
+            StopCoroutine(_writingCoroutineReference);
 
-        WritingCoroutineReference = StartCoroutine(WritingCoroutine());
+        _writingCoroutineReference = StartCoroutine(WritingCoroutine());
     }
 
     private IEnumerator WritingCoroutine()
@@ -152,9 +136,12 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
     {
         if (_currentSkipDialogPage != null)
             _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
+
+        if(_allWritingPage != null)
+            _allWritingPage.OnWriteAllDialogPage -= WriteAllPage;
     }
 
-    public void StartDialog(SecondaryDialogData data)
+    public void StartDialog(BattleDialogData data)
     {
         if (!_isContinuationOfDialogueNow)
         {
@@ -163,7 +150,7 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
 
             Validate();
 
-            OnStartedDialog?.Invoke();
+            //OnStartedDialog?.Invoke();
 
             _isContinuationOfDialogueNow = true;
             _eventBus.Invoke(new DialogStartedSignal());

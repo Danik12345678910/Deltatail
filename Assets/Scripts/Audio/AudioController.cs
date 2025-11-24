@@ -7,11 +7,11 @@ using UnityEngine.UIElements;
 public class AudioController : MonoBehaviourService
 {
     private Dictionary<string, Audio> _audiosMap = new Dictionary<string, Audio>();
-    public IMainSoundPlayable MainAudio { get; private set; }
+    //public IMainSoundPlayable MainAudio { get; private set; }
 
     private void Awake()
     {
-        MainAudio.StartSound();
+        ///MainAudio.StartSound();
     }
 
     public bool ContainsAudio(string name) => _audiosMap.ContainsKey(name);
@@ -139,10 +139,6 @@ public struct AudioContainer
     private void Register(string key)
     {
         var audioController = ServiceLocator.Current.GetService<AudioController>();
-
-        if (audioController == null)
-            throw new InvalidOperationException("Инициализация вызвана слишком рано");
-
         audioController.RegisterAudio(key);
     }
 
