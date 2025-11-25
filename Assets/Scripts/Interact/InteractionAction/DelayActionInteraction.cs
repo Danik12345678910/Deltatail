@@ -1,23 +1,19 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using Zenject;
 [Serializable]
 
 public class DelayActionInteraction : InteractionActionEndingHandler
 {
     public override event System.Action OnEndingAction;
-    private StarterCoroutine _starterCoroutine;
+    private ControllerCoroutine _starterCoroutine;
     [SerializeField, Min(0)] float _delayTimeInSeconds;
 
-    public override void Initialize()
-    {
-        _starterCoroutine = ServiceLocator.Current.GetService<StarterCoroutine>();
-    }
+    [Inject]
+    private void Init(ControllerCoroutine starterCoroutine) => _starterCoroutine = starterCoroutine;
 
-    public override void Action()
-    {
-        _starterCoroutine.StartCoroutine(DelayCoroutine());
-    }
+    public override void Action() => _starterCoroutine.StartCoroutine(DelayCoroutine());
 
     private IEnumerator DelayCoroutine()
     {

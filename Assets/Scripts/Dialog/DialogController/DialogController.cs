@@ -4,24 +4,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogController : MonoBehaviourService, IDialogStartable<MainPersonDialogData>, IDialogStartable<DialogData>, IDialogStartable<DictorDialogData>
+sealed public class DialogController : IDialogStartable<MainPersonDialogData>, IDialogStartable<DialogData>, IDialogStartable<DictorDialogData>
 {
-    [Header("—сылки на UI")]
-    [SerializeField] private GameObject _dialogBar;
-    [SerializeField] private Image _icon;
-    [SerializeField] private TMP_Text _mainPersonDialogText;
-    [SerializeField] private TMP_Text _anotherPersonDialogText;
+    readonly private ControllerCoroutine _controllerCoroutine;
+    readonly private GameObject _dialogBar;
+    readonly private Image _icon;
+    readonly private TMP_Text _mainPersonDialogText;
+    readonly private TMP_Text _anotherPersonDialogText;
 
-    [Space]
+    readonly private char _alwaysStartingPrefix;
+    readonly private char _dictorLeftPrefix;
+    readonly private char _dictorRightPrefix;
 
-    [Header("ѕараметры")]
-
-    [SerializeField] private char _alwaysStartingPrefix = '*';
-
-    [SerializeField] private char _dictorLeftPrefix = '*';
-    [SerializeField] private char _dictorRightPrefix = '*';
-
-    [SerializeField] private AudioClip[] _baseClips;
+    readonly private AudioClip[] _baseClips;
 
     private AudioClip RandomBaseClip => _baseClips[UnityEngine.Random.Range(0, _baseClips.Length)];
     private AudioContainer _dialogAudio;
@@ -33,16 +28,34 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
 
     private string _text;
 
-    public override Type ServiceType => GetType();
+    readonly private ISkipDialogPage _currentSkipDialogPage;
+    readonly private IAllWritingPage _allWritingPage;
 
-    private ISkipDialogPage _currentSkipDialogPage;
-    private IAllWritingPage _allWritingPage;
-
-    private EventBus _eventBus;
+    readonly private EventBus _eventBus;
 
     private Coroutine _writingCoroutineReference;
 
     //protected event Action OnStartedDialog;
+
+    public DialogController(DialogControllerConfig config, ControllerCoroutine controllerCoroutine, EventBus eventBus, ISkipDialogPage skipDialogPage, IAllWritingPage allWritingPage)
+    {
+        _dialogBar = config.dialogBar;
+        _icon = config.icon;
+        _mainPersonDialogText = config.mainPersonDialogText;
+        _anotherPersonDialogText = config.anotherPersonDialogText;
+        _baseClips = config.baseClips;
+        _alwaysStartingPrefix = config.alwaysStartingPrefix;
+        _dictorRightPrefix = config.dictorRightPrefix;
+        _dictorLeftPrefix = config.dictorLeftPrefix;
+
+        _controllerCoroutine = controllerCoroutine;
+        _eventBus = eventBus;
+        _currentSkipDialogPage = skipDialogPage;
+        _allWritingPage = allWritingPage;
+
+        _currentSkipDialogPage.OnSkipDialogPage += SkipDialogPage;
+        _allWritingPage.OnWriteAllDialogPage += WriteAllPage;
+    }
 
 
     private void Awake()
@@ -51,29 +64,13 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         DisactivateDialogBar();
     }
 
-    private void Start()
-    {
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
-    }
-
-    public void Initialize(ISkipDialogPage skipDialog, IAllWritingPage allWritingPage, string audioKey)
-    {
-        _dialogAudio.Initialize(audioKey);
-        _currentSkipDialogPage = skipDialog;
-        _allWritingPage = allWritingPage;
-
-        _currentSkipDialogPage.OnSkipDialogPage += SkipDialogPage;
-        _allWritingPage.OnWriteAllDialogPage += WriteAllPage;
-    }
-
-
     private void WriteAllPage()
     {
         if (_isContinuationOfDialogueNow && !_isEndingPageDialog)
         {
             _anotherPersonDialogText.text = _text;
             _isEndingPageDialog = true;
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
             _writingCoroutineReference = null;
         }
     }
@@ -151,7 +148,7 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
         _isContinuationOfDialogueNow = false;
 
         if (_writingCoroutineReference != null)
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
     }
 
     private void ResetAllText()
@@ -170,10 +167,10 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
     private void SetDialogInDialogTextCurrentPage()
     {
         if (_writingCoroutineReference != null)
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
 
         SetText();
-        _writingCoroutineReference = StartCoroutine(WritingCoroutine());
+        _writingCoroutineReference = _controllerCoroutine.StartCoroutine(WritingCoroutine());
     }
 
     private IEnumerator WritingCoroutine()
@@ -248,5 +245,37 @@ public class DialogController : MonoBehaviourService, IDialogStartable<MainPerso
             ActivateDialogBar();
             SetDialogInDialogTextCurrentPage();
         }
+    }
+}
+
+public struct DialogControllerConfig
+{
+    public readonly GameObject dialogBar;
+    public readonly Image icon;
+    public readonly TMP_Text mainPersonDialogText;
+    public readonly TMP_Text anotherPersonDialogText;
+    public readonly AudioClip[] baseClips;
+    public readonly char alwaysStartingPrefix;
+    public readonly char dictorRightPrefix;
+    public readonly char dictorLeftPrefix;
+
+    public DialogControllerConfig(
+        GameObject dialogBar,
+        Image icon,
+        TMP_Text mainPersonDialogText,
+        TMP_Text anotherPersonDialogText,
+        AudioClip[] baseClips,
+        char alwaysStartingPrefix = '*',
+        char dictorRightPrefix = ')',
+        char dictorLeftPrefix = '(')
+    {
+        this.dialogBar = dialogBar;
+        this.icon = icon;
+        this.mainPersonDialogText = mainPersonDialogText;
+        this.anotherPersonDialogText = anotherPersonDialogText;
+        this.baseClips = baseClips;
+        this.alwaysStartingPrefix = alwaysStartingPrefix;
+        this.dictorRightPrefix = dictorRightPrefix;
+        this.dictorLeftPrefix = dictorLeftPrefix;
     }
 }

@@ -119,7 +119,7 @@ public class AudioController : MonoBehaviourService
 
         public void Play()
         {
-            var starterCoroutine = ServiceLocator.Current.GetService<StarterCoroutine>();
+            var starterCoroutine = ServiceLocator.Current.GetService<ControllerCoroutine>();
             starterCoroutine.StartCoroutine(EndingHandlerCoroutine(Clip));
             _source.Play();
         }

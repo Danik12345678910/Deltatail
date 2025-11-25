@@ -10,12 +10,12 @@ public class MovementInteractionAction : InteractionActionEndingHandler
     [SerializeField] private Transform _transform;
     [SerializeField] private float _speed;
     private Vector2 _oldPosition;
-    private StarterCoroutine _starterCoroutine;
+    private ControllerCoroutine _starterCoroutine;
 
     public override void Action()
     {
         _oldPosition = _transform.position;
-        _starterCoroutine = ServiceLocator.Current.GetService<StarterCoroutine>();
+        _starterCoroutine = ServiceLocator.Current.GetService<ControllerCoroutine>();
         _starterCoroutine.StartCoroutine(MoveCoroutine());
     }
 

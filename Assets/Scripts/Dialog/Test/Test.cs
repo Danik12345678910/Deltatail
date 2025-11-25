@@ -1,15 +1,14 @@
 using UnityEngine;
+using Zenject;
 
 public class Test : MonoBehaviour
 {
     [SerializeField] private DialogData _first;
     [SerializeField] private MainPersonDialogData _two;
+
+    [Inject]
     private DialogController _controller;
 
-    private void Start()
-    {
-        _controller = ServiceLocator.Current.GetService<DialogController>();
-    }
 
     private void Update()
     {
