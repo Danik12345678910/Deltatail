@@ -1,22 +1,8 @@
-﻿using System;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 
-public class SceneTransitionController : MonoBehaviourService
+sealed public class SceneTransitionController
 {
-    public void Transition(Scene scene)
-    {
-        SceneManager.LoadScene(scene.name);
-    }
+    public void Transition(in Scene scene) => SceneManager.LoadScene(scene.name);
 
-    public void Transition(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
-    }
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public override Type ServiceType => GetType();
+    public void Transition(in string sceneName) => SceneManager.LoadScene(sceneName);
 }

@@ -17,8 +17,6 @@ public class MovingToLocationSceneBootstrap : SceneBootstrap
         
         _dialogController.Initialize(_newInputSystemData.SkipDialog, _newInputSystemData.WriteAllDialogPage, _name);
 
-        _playerNewInputSystem.Initialize(_newInputSystemData.InputActions);
-
         _handlerController.Initialize(_newInputSystemData.MovingVariant, _newInputSystemData.ActivateVariant);
 
         ServiceLocator.Current.Register<IInteractInput>((IInteractInput)_newInputSystemData.InputInteract);

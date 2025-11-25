@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-public class GameContext : MonoBehaviourService
+sealed public class GameContext
 {
     private Dictionary<Type, IGameContextData> _contextsMap = new Dictionary<Type, IGameContextData>();
 
-    public override Type ServiceType => GetType();
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void WriteContext<T>(T context) where T : IGameContextData
+    public void WriteContext<T>(in T context) where T : IGameContextData
     {
         var key = typeof(T);
 

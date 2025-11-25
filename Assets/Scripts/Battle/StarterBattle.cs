@@ -2,23 +2,31 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StarterBattle : MonoBehaviourService
+sealed public class StarterBattle
 {
-    [SerializeField] private Scene _battleScene;
-    [SerializeField] private int _maxCount;
-    public override Type ServiceType => GetType();
-    public void StartBattle(GroupMonsterBattleData monsterBattleData)
+    readonly private Scene _battleScene;
+    readonly private int _maxCount;
+    readonly private GameContext _gameContext;
+    readonly private SceneTransitionController _sceneTransitionController;
+
+    public StarterBattle(Scene battleScene, int maxCount, GameContext gameContext, SceneTransitionController transitionController)
+    {
+        _battleScene = battleScene;
+        _maxCount = maxCount;
+        _gameContext = gameContext;
+        _sceneTransitionController = transitionController;
+    }
+
+    public void StartBattle(in GroupMonsterBattleData monsterBattleData)
     {
         if (monsterBattleData.Monsters.Length > _maxCount)
             throw new InvalidOperationException("Монстров больше максимального количества. Максимальное количество:" + _maxCount);
 
         PlayerBattleData playerBattleData = ServiceLocator.Current.GetService<PlayerDataService>().BattleData;
-        GameContext context = ServiceLocator.Current.GetService<GameContext>();
-        SceneTransitionController sceneTransitionController = ServiceLocator.Current.GetService<SceneTransitionController>();
 
         BattleStartedContextData battleStartedContext = new BattleStartedContextData(new BattleData(playerBattleData, monsterBattleData));
 
-        context.WriteContext(battleStartedContext);
-        sceneTransitionController.Transition(_battleScene);
+        _gameContext.WriteContext(battleStartedContext);
+        _sceneTransitionController.Transition(_battleScene);
     }
 }

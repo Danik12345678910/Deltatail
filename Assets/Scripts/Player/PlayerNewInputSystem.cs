@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 [RequireComponent (typeof(PlayerMovementController))]
 
 public class PlayerNewInputSystem : MonoBehaviour
@@ -6,7 +7,8 @@ public class PlayerNewInputSystem : MonoBehaviour
     private InputSystem_Actions _action;
     private PlayerMovementController _controller;
 
-    public void Initialize(InputSystem_Actions actions)
+    [Inject]
+    private void Initialize(InputSystem_Actions actions)
     {
         _controller = GetComponent<PlayerMovementController>();
         _action = actions;

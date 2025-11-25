@@ -12,18 +12,12 @@ public abstract class SceneBootstrap : MonoBehaviour
     {
         ServiceLocator.Initialize();
 
-        var sceneTransition = FindFirstObjectByType<SceneTransitionController>();
-
-        ServiceLocator.Current.Register(sceneTransition);
-
         if (_contextUpdaters != null)
         {
-            var gameContext = FindFirstObjectByType<GameContext>();
             var eventBus = FindFirstObjectByType<EventBus>();
-            ServiceLocator.Current.Register(gameContext);
 
-            foreach (var contextUpdater in _contextUpdaters)
-                contextUpdater.Initialize(eventBus, gameContext);
+            //foreach (var contextUpdater in _contextUpdaters)
+            //    contextUpdater.Initialize(eventBus, gameContext);
 
             foreach (var contextUpdater in _contextUpdaters)
                 contextUpdater.SubscribeToWriteContext();
