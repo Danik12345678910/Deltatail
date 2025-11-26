@@ -1,19 +1,23 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 [Serializable]
-public class DialogFullInteractionAction : InteractionActionEndingHandler
+sealed public class DialogFullInteractionAction : InteractionActionEndingHandler
 {
     [SerializeField] private MainPersonDialogData _dialog;
 
-    private event System.Action OnSubscribeHandler;
+    private event Action OnSubscribeHandler;
     private bool _isSubscribed;
     private EventBus _eventBus;
+    private IDialogStartable<MainPersonDialogData> _mainPersonDialogStartable;
 
-    public override event System.Action OnEndingAction;
+    public override event Action OnEndingAction;
 
+    [Inject]
+    private void Initialize(IDialogStartable<MainPersonDialogData> mainPersonDialogStartable) => _mainPersonDialogStartable = mainPersonDialogStartable;
 
-    public override void Initialize()
+    public override void Start()
     {
         OnSubscribeHandler += Unsubscribe;
 
@@ -57,8 +61,7 @@ public class DialogFullInteractionAction : InteractionActionEndingHandler
 
     public override void Action()
     {
-        var dialogController = ServiceLocator.Current.GetService<DialogController>();
         Subscribe();
-        dialogController.StartDialog(_dialog);
+        _mainPersonDialogStartable.StartDialog(_dialog);
     }
 }

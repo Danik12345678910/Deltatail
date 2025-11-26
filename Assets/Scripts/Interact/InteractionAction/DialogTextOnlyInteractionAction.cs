@@ -8,12 +8,13 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
 
     private event System.Action OnSubscribeHandler;
     private bool _isSubscribed;
+    private IDialogStartable<DialogData> _dialogStartable;
     private EventBus _eventBus;
 
     public override event System.Action OnEndingAction;
-    
 
-    public override void Initialize()
+
+    public override void Start()
     {
         OnSubscribeHandler += Unsubscribe;
 
@@ -22,7 +23,7 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
 
     private void Subscribe()
     {
-        if (_isSubscribed) 
+        if (_isSubscribed)
             return;
 
         _isSubscribed = true;
@@ -36,10 +37,7 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
         OnEndingAction?.Invoke();
     }
 
-    private void SubscribeHandler(DialogEndedSignal signal)
-    {
-        OnSubscribeHandler?.Invoke();
-    }
+    private void SubscribeHandler(DialogEndedSignal signal) => OnSubscribeHandler?.Invoke();
 
     private void Unsubscribe()
     {
@@ -57,8 +55,7 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
 
     public override void Action()
     {
-        var dialogController = ServiceLocator.Current.GetService<DialogController>();
         Subscribe();
-        dialogController.StartDialog(_dialog);
+        _dialogStartable.StartDialog(_dialog);
     }
 }

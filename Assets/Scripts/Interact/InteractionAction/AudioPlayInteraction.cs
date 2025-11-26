@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zenject;
 using static AudioController;
 
 [Serializable]
@@ -14,15 +15,17 @@ public class AudioPlayInteraction : InteractionActionEndingHandler
     [SerializeField] private string _audioName = "InteractAudio";
 
     private Audio _audio;
-     
-    public override void Initialize()
-    {
-        AudioController audioController = ServiceLocator.Current.GetService<AudioController>();
+    private AudioController _audioController;
 
-        if (audioController.ContainsAudio(_audioName))
-            _audio = audioController.GetAudio(_audioName);
+    [Inject]
+    private void Initialize(AudioController audioController) => _audioController = audioController;
+
+    public override void Start()
+    {
+        if (_audioController.ContainsAudio(_audioName))
+            _audio = _audioController.GetAudio(_audioName);
         else
-            _audio = audioController.RegisterAudio(_audioName);
+            _audio = _audioController.RegisterAudio(_audioName);
     }
 
     public override void Action()

@@ -545,13 +545,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _monobehaviorServices:
-  - {fileID: 1140213889}
-  - {fileID: 215095433}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1915637259}
   - {fileID: 1463483108}
-  - {fileID: 1742084253}
+  - {fileID: 0}
   _contextUpdaters: []
-  _dialogController: {fileID: 1140213889}
   _handlerController: {fileID: 1443168791}
   _playerNewInputSystem: {fileID: 1915637258}
   references:
@@ -842,37 +841,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1140213890}
-  - component: {fileID: 1140213889}
+  - component: {fileID: 1140213891}
   m_Layer: 0
-  m_Name: DialogController4
+  m_Name: DialogControllerInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1140213889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1140213888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4d4e2ce256aafc4eb0ac5bb596862d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dialogBar: {fileID: 1412698603}
-  _icon: {fileID: 2144819493}
-  _mainPersonDialogText: {fileID: 1740697747}
-  _anotherPersonDialogText: {fileID: 87143102}
-  _alwaysStartingPrefix: 42
-  _dictorLeftPrefix: 40
-  _dictorRightPrefix: 41
-  _baseClips:
-  - {fileID: 8300000, guid: b855af5b23656c0458ac44b24cf4e8b8, type: 3}
-  - {fileID: 8300000, guid: b855af5b23656c0458ac44b24cf4e8b8, type: 3}
-  - {fileID: 8300000, guid: b855af5b23656c0458ac44b24cf4e8b8, type: 3}
 --- !u!4 &1140213890
 Transform:
   m_ObjectHideFlags: 0
@@ -888,6 +864,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140213891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140213888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca9c081a6224f684994e4e517fef3163, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dialogBar: {fileID: 1412698603}
+  _icon: {fileID: 2144819493}
+  _mainPersonDialogText: {fileID: 1740697747}
+  _anotherPersonDialogText: {fileID: 87143102}
+  _alwaysStartingPrefix: 42
+  _dictorLeftPrefix: 40
+  _dictorRightPrefix: 41
+  _baseClips:
+  - {fileID: 8300000, guid: b855af5b23656c0458ac44b24cf4e8b8, type: 3}
+  - {fileID: 8300000, guid: 300f0ad16800ad5468f972b5da26efe8, type: 3}
+  - {fileID: 8300000, guid: 527915e26f37ff240b6f44e5568d26d4, type: 3}
 --- !u!1 &1170980746
 GameObject:
   m_ObjectHideFlags: 0

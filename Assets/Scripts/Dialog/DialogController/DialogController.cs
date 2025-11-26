@@ -19,7 +19,7 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
     readonly private AudioClip[] _baseClips;
 
     private AudioClip RandomBaseClip => _baseClips[UnityEngine.Random.Range(0, _baseClips.Length)];
-    private AudioContainer _dialogAudio;
+    readonly private Audio _dialogAudio;
 
     private DialogData _currentDialog;
     private bool _isContinuationOfDialogueNow;
@@ -37,8 +37,10 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
 
     //protected event Action OnStartedDialog;
 
-    public DialogController(DialogControllerConfig config, ControllerCoroutine controllerCoroutine, EventBus eventBus, ISkipDialogPage skipDialogPage, IAllWritingPage allWritingPage)
+    public DialogController(DialogControllerConfig config, ControllerCoroutine controllerCoroutine, EventBus eventBus, AudioController audioController,ISkipDialogPage skipDialogPage, IAllWritingPage allWritingPage, string dialogAudioName = "Dialog")
     {
+        _dialogAudio = audioController.RegisterAudio(dialogAudioName);
+
         _dialogBar = config.dialogBar;
         _icon = config.icon;
         _mainPersonDialogText = config.mainPersonDialogText;
@@ -183,8 +185,8 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
         {
             currentText += _text[i];
 
-            _dialogAudio.Audio.ChangePitch(UnityEngine.Random.Range(0.9f, 0.95f));
-            _dialogAudio.Audio.PlayOneShot(RandomBaseClip);
+            _dialogAudio.ChangePitch(UnityEngine.Random.Range(0.9f, 0.95f));
+            _dialogAudio.PlayOneShot(RandomBaseClip);
 
             if (_currentDialog is MainPersonDialogData)
                 _mainPersonDialogText.text = currentText;
@@ -259,15 +261,7 @@ public struct DialogControllerConfig
     public readonly char dictorRightPrefix;
     public readonly char dictorLeftPrefix;
 
-    public DialogControllerConfig(
-        GameObject dialogBar,
-        Image icon,
-        TMP_Text mainPersonDialogText,
-        TMP_Text anotherPersonDialogText,
-        AudioClip[] baseClips,
-        char alwaysStartingPrefix = '*',
-        char dictorRightPrefix = ')',
-        char dictorLeftPrefix = '(')
+    public DialogControllerConfig(GameObject dialogBar, Image icon, TMP_Text mainPersonDialogText, TMP_Text anotherPersonDialogText, AudioClip[] baseClips, char alwaysStartingPrefix, char dictorLeftPrefix, char dictoRightPrefix)
     {
         this.dialogBar = dialogBar;
         this.icon = icon;
@@ -275,7 +269,7 @@ public struct DialogControllerConfig
         this.anotherPersonDialogText = anotherPersonDialogText;
         this.baseClips = baseClips;
         this.alwaysStartingPrefix = alwaysStartingPrefix;
-        this.dictorRightPrefix = dictorRightPrefix;
         this.dictorLeftPrefix = dictorLeftPrefix;
+        this.dictorRightPrefix = dictoRightPrefix;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 [Serializable]
 public class MovementInteractionAction : InteractionActionEndingHandler
@@ -12,10 +13,12 @@ public class MovementInteractionAction : InteractionActionEndingHandler
     private Vector2 _oldPosition;
     private ControllerCoroutine _starterCoroutine;
 
+    [Inject]
+    private void Initialize(ControllerCoroutine starter) => _starterCoroutine = starter;
+     
     public override void Action()
     {
         _oldPosition = _transform.position;
-        _starterCoroutine = ServiceLocator.Current.GetService<ControllerCoroutine>();
         _starterCoroutine.StartCoroutine(MoveCoroutine());
     }
 

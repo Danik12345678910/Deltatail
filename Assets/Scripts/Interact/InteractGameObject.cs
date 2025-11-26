@@ -24,7 +24,7 @@ abstract public class InteractGameObject : MonoBehaviour
         _eventBus = ServiceLocator.Current.GetService<EventBus>();
 
         foreach (var action in _actions)
-            action.Initialize();
+            action.Start();
 
         foreach (var action in _actions)
             action.OnEndingAction += DisableAction;

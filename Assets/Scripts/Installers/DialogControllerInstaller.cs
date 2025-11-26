@@ -19,20 +19,22 @@ namespace Assets.Scripts.Installers
 
         [SerializeField] private char _alwaysStartingPrefix = '*';
 
-        [SerializeField] private char _dictorLeftPrefix = '*';
-        [SerializeField] private char _dictorRightPrefix = '*';
+        [SerializeField] private char _dictorLeftPrefix = '(';
+        [SerializeField] private char _dictorRightPrefix = ')';
 
         [SerializeField] private AudioClip[] _baseClips;
         public override void InstallBindings()
         {
-            DialogControllerConfig config = new DialogControllerConfig
+            DialogControllerConfig config = new DialogControllerConfig 
             (
                 _dialogBar,
                 _icon,
                 _mainPersonDialogText,
                 _anotherPersonDialogText,
                 _baseClips,
-                _alwaysStartingPrefix
+                _alwaysStartingPrefix,
+                _dictorLeftPrefix,
+                _dictorRightPrefix
             );
 
             Container.BindInterfacesTo<DialogController>().AsSingle().WithArguments(config);

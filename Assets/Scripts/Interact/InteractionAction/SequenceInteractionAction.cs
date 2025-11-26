@@ -9,11 +9,11 @@ public class SequenceInteractionAction : InteractionActionEndingHandler
     public override event System.Action OnEndingAction;
     private bool _isSubscribed;
 
-    public override void Initialize()
+    public override void Start()
     {
         _isSubscribed = false;
         foreach (var action in _listInteractionsActions)
-            action.Initialize();
+            action.Start();
     }
 
     public override void Action()

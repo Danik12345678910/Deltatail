@@ -7,7 +7,7 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
 {
     [SerializeField] private GameObject _dialogBar;
     [SerializeField] private TMP_Text _dialogText;
-    private AudioContainer _dialogAudio;
+    private Audio _dialogAudio;
 
     private BattleDialogData _currentDialog;
     private bool _isContinuationOfDialogueNow;
@@ -38,7 +38,6 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
 
     public void Initialize(in ISkipDialogPage skipDialog, in IAllWritingPage allWritingPage, in string audioKey)
     {
-        _dialogAudio.Initialize(audioKey);
         _currentSkipDialogPage = skipDialog;
         _allWritingPage = allWritingPage;
 
@@ -118,8 +117,8 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
 
             if (_currentDialog.Sound.AllSounds.Length > 0)
             {
-                _dialogAudio.Audio.ChangePitch(UnityEngine.Random.Range(0.9f, 0.95f));
-                _dialogAudio.Audio.PlayOneShot(_currentDialog.Sound.RandomSound);
+                _dialogAudio.ChangePitch(UnityEngine.Random.Range(0.9f, 0.95f));
+                _dialogAudio.PlayOneShot(_currentDialog.Sound.RandomSound);
             }
 
             _dialogText.text = currentText;

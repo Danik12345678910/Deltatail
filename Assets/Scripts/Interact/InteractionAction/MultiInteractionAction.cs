@@ -8,10 +8,10 @@ public class MultiInteractionAction : InteractionActionEndingHandler
 
     public override event System.Action OnEndingAction;
 
-    public override void Initialize()
+    public override void Start()
     {
         foreach (InteractionAction action in _listInteractionsActions)
-            action.Initialize();
+            action.Start();
     }
 
     public override void Action()
