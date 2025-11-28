@@ -15,13 +15,15 @@ sealed public class DialogFullInteractionAction : InteractionActionEndingHandler
     public override event Action OnEndingAction;
 
     [Inject]
-    private void Initialize(IDialogStartable<MainPersonDialogData> mainPersonDialogStartable) => _mainPersonDialogStartable = mainPersonDialogStartable;
+    private void Initialize(IDialogStartable<MainPersonDialogData> mainPersonDialogStartable, EventBus eventBus)
+    {
+        _mainPersonDialogStartable = mainPersonDialogStartable;
+        _eventBus = eventBus;
+    }
 
     public override void Start()
     {
         OnSubscribeHandler += Unsubscribe;
-
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
     }
 
     private void Subscribe()

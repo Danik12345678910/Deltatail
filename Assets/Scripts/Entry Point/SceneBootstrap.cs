@@ -14,7 +14,7 @@ public abstract class SceneBootstrap : MonoBehaviour
 
         if (_contextUpdaters != null)
         {
-            var eventBus = FindFirstObjectByType<EventBus>();
+            //var eventBus = FindFirstObjectByType<EventBus>();
 
             //foreach (var contextUpdater in _contextUpdaters)
             //    contextUpdater.Initialize(eventBus, gameContext);

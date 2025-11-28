@@ -1,19 +1,26 @@
+using System;
 using UnityEngine;
+using Zenject;
 
-public class SpawnMonsterMoving : MonoBehaviour
+sealed public class SpawnMonsterMoving : IDisposable
 {
-    [SerializeReference, SubclassSelector]private IChanceCounterStartBattle _chanceCounter;
-    private EventBus _bus;
+    readonly private IChanceCounterStartBattle _chanceCounter;
+    readonly private EventBus _bus;
+    private bool _isSubscribe = false;
 
-    private void Start()
+    public void Dispose()
     {
-        _bus = ServiceLocator.Current.GetService<EventBus>();   
-        _bus.Subscribe<PlayerMoveSignal>(StartingBattleCheck);
+        if (_isSubscribe)
+            _bus.Unsubscribe<PlayerMoveSignal>(StartingBattleCheck);
     }
 
-    private void OnDestroy()
+    public SpawnMonsterMoving(EventBus eventBus, IChanceCounterStartBattle chanceCounterStartBattle)
     {
-        _bus.Unsubscribe<PlayerMoveSignal>(StartingBattleCheck);    
+        _bus = eventBus;
+        _chanceCounter = chanceCounterStartBattle;
+
+        _bus.Subscribe<PlayerMoveSignal>(StartingBattleCheck);
+        _isSubscribe = true;
     }
 
     private void StartingBattleCheck(PlayerMoveSignal signal)

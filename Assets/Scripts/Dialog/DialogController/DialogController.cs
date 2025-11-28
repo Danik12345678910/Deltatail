@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-sealed public class DialogController : IDialogStartable<MainPersonDialogData>, IDialogStartable<DialogData>, IDialogStartable<DictorDialogData>
+sealed public class DialogController : IDialogStartable<MainPersonDialogData>, IDialogStartable<DialogData>, IDialogStartable<DictorDialogData>, IStartable, IDisposable
 {
     readonly private ControllerCoroutine _controllerCoroutine;
     readonly private GameObject _dialogBar;
@@ -19,6 +19,9 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
     readonly private AudioClip[] _baseClips;
 
     private AudioClip RandomBaseClip => _baseClips[UnityEngine.Random.Range(0, _baseClips.Length)];
+
+    public int Priority => throw new NotImplementedException();
+
     readonly private Audio _dialogAudio;
 
     private DialogData _currentDialog;
@@ -59,12 +62,6 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
         _allWritingPage.OnWriteAllDialogPage += WriteAllPage;
     }
 
-
-    private void Awake()
-    {
-        ResetDialog();
-        DisactivateDialogBar();
-    }
 
     private void WriteAllPage()
     {
@@ -202,15 +199,6 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
     private void ActivateDialogBar() => _dialogBar.SetActive(true);
     private void DisactivateDialogBar() => _dialogBar.SetActive(false);
 
-    private void OnDestroy()
-    {
-        if (_currentSkipDialogPage != null)
-            _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
-
-        if (_allWritingPage != null)
-            _allWritingPage.OnWriteAllDialogPage -= WriteAllPage;
-    }
-
     public void StartDialog(DialogData data)
     {
         if (!_isContinuationOfDialogueNow)
@@ -247,6 +235,21 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
             ActivateDialogBar();
             SetDialogInDialogTextCurrentPage();
         }
+    }
+
+    public void Start()
+    {
+        ResetDialog();
+        DisactivateDialogBar();
+    }
+
+    public void Dispose()
+    {
+        if (_currentSkipDialogPage != null)
+            _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
+
+        if (_allWritingPage != null)
+            _allWritingPage.OnWriteAllDialogPage -= WriteAllPage;
     }
 }
 

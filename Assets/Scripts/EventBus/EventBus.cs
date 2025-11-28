@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class EventBus : MonoBehaviourService
+sealed public class EventBus 
 {
     private Dictionary<string, List<Delegate>> _signalCallbacksMap = new Dictionary<string, List<Delegate>>();
 
-    public override Type ServiceType => GetType();
-
-    public void Subscribe<T>(Action<T> callback) where T : ISignal
+    public void Subscribe<T>(in Action<T> callback) where T : ISignal
     {
         var key = typeof(T).Name;
 
@@ -19,7 +16,7 @@ public class EventBus : MonoBehaviourService
             _signalCallbacksMap.Add(key, new List<Delegate>() { callback });
     }
 
-    public void Unsubscribe<T>(Action<T> callback) where T : ISignal
+    public void Unsubscribe<T>(in Action<T> callback) where T : ISignal
     {
         var key = typeof(T).Name;
 
@@ -29,7 +26,7 @@ public class EventBus : MonoBehaviourService
             Debug.LogError("Попытка отписаться не сработала.");
     }
 
-    public void Invoke<T>(T signal) where T : ISignal
+    public void Invoke<T>(in T signal) where T : ISignal
     {
         var key = typeof(T).Name;
 

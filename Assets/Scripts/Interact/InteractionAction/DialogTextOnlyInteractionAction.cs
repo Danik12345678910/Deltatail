@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Zenject;
 
 [Serializable]
 public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
@@ -11,14 +12,15 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
     private IDialogStartable<DialogData> _dialogStartable;
     private EventBus _eventBus;
 
+    [Inject]
+    private void Initialize(EventBus eventBus) => _eventBus = eventBus;
+
     public override event System.Action OnEndingAction;
 
 
     public override void Start()
     {
         OnSubscribeHandler += Unsubscribe;
-
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
     }
 
     private void Subscribe()

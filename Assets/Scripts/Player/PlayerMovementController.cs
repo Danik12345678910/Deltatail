@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
+using Zenject;
 
-public class PlayerMovementController : MonoBehaviour
+sealed public class PlayerMovementController : MonoBehaviour
 {
     private bool _moveIsLock;
     private EventBus _eventBus;
@@ -15,6 +15,13 @@ public class PlayerMovementController : MonoBehaviour
 
     [SerializeField] private PlayerAnimation _playerAnimation;
 
+
+    [Inject]
+    private void Initialize(EventBus eventBus)
+    {
+        _eventBus = eventBus;
+    }
+
     public void LockMove()
     {
         StopMove();
@@ -27,7 +34,6 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Start()
     {
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
 
         _eventBus.Subscribe<DialogStartedSignal>(OnDialogStarted);
         _eventBus.Subscribe<DialogEndedSignal>(OnDialogEnded);

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 abstract public class InteractGameObject : MonoBehaviour
 {
@@ -11,6 +12,9 @@ abstract public class InteractGameObject : MonoBehaviour
     private EventBus _eventBus;
 
     protected PlayerTouchCurrentGameObjectDetect _touchDetect;
+
+    [Inject]
+    private void Initialize(EventBus eventBus) => _eventBus = eventBus;
      
     protected virtual void Awake()
     {
@@ -21,8 +25,6 @@ abstract public class InteractGameObject : MonoBehaviour
 
     protected virtual void Start()
     {
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
-
         foreach (var action in _actions)
             action.Start();
 

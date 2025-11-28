@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class BattleDialogController : MonoBehaviourService, IDialogStartable<BattleDialogData>
+public class BattleDialogController : IDialogStartable<BattleDialogData>, IStartable
 {
     [SerializeField] private GameObject _dialogBar;
     [SerializeField] private TMP_Text _dialogText;
@@ -14,32 +14,26 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
     private bool _isEndingPageDialog;
     private int _currentPageIndex;
 
-    public override Type ServiceType => GetType();
+    readonly private ISkipDialogPage _currentSkipDialogPage;
+    readonly private IAllWritingPage _allWritingPage;
 
-    private ISkipDialogPage _currentSkipDialogPage;
-    private IAllWritingPage _allWritingPage;
-
-    private EventBus _eventBus;
+    readonly private EventBus _eventBus;
+    readonly private ControllerCoroutine _controllerCoroutine;
 
     private Coroutine _writingCoroutineReference;
+
+    public int Priority => throw new NotImplementedException();
 
     //protected event Action OnStartedDialog;
 
 
-    private void Awake()
-    {
-        DisactivateDialogBar();
-    }
 
-    private void Start()
-    {
-        _eventBus = ServiceLocator.Current.GetService<EventBus>();
-    }
-
-    public void Initialize(in ISkipDialogPage skipDialog, in IAllWritingPage allWritingPage, in string audioKey)
+    public BattleDialogController(ISkipDialogPage skipDialog, IAllWritingPage allWritingPage, EventBus eventBus, ControllerCoroutine controllerCoroutine, in string audioKey)
     {
         _currentSkipDialogPage = skipDialog;
         _allWritingPage = allWritingPage;
+        _eventBus = eventBus;
+        _controllerCoroutine = controllerCoroutine;
 
         _currentSkipDialogPage.OnSkipDialogPage += SkipDialogPage;
         _allWritingPage.OnWriteAllDialogPage += WriteAllPage;
@@ -51,7 +45,7 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
         {
             _dialogText.text = _currentDialog.DialogPages[_currentPageIndex];
             _isEndingPageDialog = true;
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
             _writingCoroutineReference = null;
         }
     }
@@ -91,7 +85,7 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
         _isContinuationOfDialogueNow = false;
 
         if (_writingCoroutineReference != null)
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
 
         _eventBus.Invoke(new DialogEndedSignal());
     }
@@ -99,9 +93,9 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
     private void SetDialogInDialogTextCurrentPage()
     {
         if (_writingCoroutineReference != null)
-            StopCoroutine(_writingCoroutineReference);
+            _controllerCoroutine.StopCoroutine(_writingCoroutineReference);
 
-        _writingCoroutineReference = StartCoroutine(WritingCoroutine());
+        _writingCoroutineReference = _controllerCoroutine.StartCoroutine(WritingCoroutine());
     }
 
     private IEnumerator WritingCoroutine()
@@ -136,7 +130,7 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
         if (_currentSkipDialogPage != null)
             _currentSkipDialogPage.OnSkipDialogPage -= SkipDialogPage;
 
-        if(_allWritingPage != null)
+        if (_allWritingPage != null)
             _allWritingPage.OnWriteAllDialogPage -= WriteAllPage;
     }
 
@@ -158,4 +152,7 @@ public class BattleDialogController : MonoBehaviourService, IDialogStartable<Bat
             SetDialogInDialogTextCurrentPage();
         }
     }
+
+    public void Start() => DisactivateDialogBar();
+
 }
