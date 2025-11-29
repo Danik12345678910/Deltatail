@@ -20,7 +20,7 @@ sealed public class DialogController : IDialogStartable<MainPersonDialogData>, I
 
     private AudioClip RandomBaseClip => _baseClips[UnityEngine.Random.Range(0, _baseClips.Length)];
 
-    public int Priority => throw new NotImplementedException();
+    public int Priority => -1;
 
     readonly private Audio _dialogAudio;
 

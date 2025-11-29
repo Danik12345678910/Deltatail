@@ -1,17 +1,17 @@
 using System;
 using UnityEngine;
+using Zenject;
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class PlayerDataService : MonoBehaviourService
+public class PlayerDataService : MonoBehaviour
 {
-    public override Type ServiceType => GetType();
-
     public Transform Transform { get; private set; }
     public PlayerBattleData BattleData { get; private set; }
     public GameObject GameObject { get; private set; }
     public Rigidbody2D Rigidbody2D { get; private set; }
 
-    public void Initialize(PlayerBattleData battleData)
+    [Inject]
+    private void Initialize(PlayerBattleData battleData)
     {
         BattleData = battleData;
     }
