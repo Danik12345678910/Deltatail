@@ -2,7 +2,7 @@ using UnityEngine;
 using Zenject;
 [RequireComponent (typeof(PlayerMovementController))]
 
-public class PlayerNewInputSystem : MonoBehaviour
+sealed public class PlayerNewInputSystem : MonoBehaviour
 {
     private InputSystem_Actions _action;
     private PlayerMovementController _controller;
@@ -16,4 +16,6 @@ public class PlayerNewInputSystem : MonoBehaviour
         _action.Player.Movement.performed += _ => _controller.Move(_.ReadValue<Vector2>());
         _action.Player.Movement.canceled += _ => _controller.StopMove();
     }
+
+    private void OnDestroy() => _action?.Disable();
 }

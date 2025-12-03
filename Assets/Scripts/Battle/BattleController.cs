@@ -1,13 +1,11 @@
-using System;
-
-public class BattleController : MonoBehaviourService
+sealed public class BattleController 
 {
-    private FSM<BattleState> _fsmStateMap;
+    readonly private FSM<BattleState> _fsmStateMap;
+    readonly private BattleState[] _sequentialListBattleState;
     private int _nextBattleState;
-    private int _countCycle;
-    private BattleState[] _sequentialListBattleState;
+    private int _countCycle = 0;
 
-    public void Initialize(FSM<BattleState> fsmStateInitialized, BattleState[] sequentialListBattleState)
+    public BattleController(FSM<BattleState> fsmStateInitialized, BattleState[] sequentialListBattleState)
     {
         _fsmStateMap = fsmStateInitialized;
         _sequentialListBattleState = sequentialListBattleState;
@@ -25,6 +23,4 @@ public class BattleController : MonoBehaviourService
         _fsmStateMap.SetCurrentState(currentBattleState.GetType());
         _nextBattleState++;
     }
-
-    public override Type ServiceType => GetType();
 }

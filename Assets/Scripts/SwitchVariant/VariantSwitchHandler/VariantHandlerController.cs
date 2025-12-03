@@ -1,17 +1,15 @@
 using System;
 
-public class VariantHandlerController : MonoBehaviourService
+sealed public class VariantHandlerController : IDisposable
 {
-    public override Type ServiceType => GetType();
-
     private Variant[] _listVariants;
     private Variant _currentVariant;
-    private IInputMovingVariant _movingVariant;
-    private IInputActivateVariant _activateVariant;
+    readonly private IInputMovingVariant _movingVariant;
+    readonly private IInputActivateVariant _activateVariant;
     private int _currentVariantIndex;
     private bool _isEnable;
 
-    public void Initialize(IInputMovingVariant moving, IInputActivateVariant activate)
+    public VariantHandlerController(IInputMovingVariant moving, IInputActivateVariant activate)
     {
         _movingVariant = moving;
         _activateVariant = activate;
@@ -54,7 +52,7 @@ public class VariantHandlerController : MonoBehaviourService
         }
     }
 
-    public void StartHandler(Variant[] listVariant)
+    public void StartHandler(in Variant[] listVariant)
     {
         _currentVariantIndex = 0;
         _listVariants = listVariant;
@@ -77,7 +75,7 @@ public class VariantHandlerController : MonoBehaviourService
         _isEnable = false;
     }
 
-    private void OnDestroy()
+    public void Dispose()
     {
         _movingVariant.OnInputDown += DownVariant;
         _movingVariant.OnInputUp += UpVariant;

@@ -49,7 +49,7 @@ sealed public class PlayerMovementController : MonoBehaviour
         if (!_moveIsLock)
         {
             //new PlayerMoveData();
-            //_eventBus.Invoke(new PlayerMoveSignal(_playerData.Rigidbody2D.position);
+            //_eventBus.Invoke(new PlayerMoveSignal(new PlayerMoveData(_playerData)));
             _playerData.Rigidbody2D.linearVelocity = move * _speed;
             _playerAnimation.AnimationMovement(move);
             //SetDirectionToMovement(move);
