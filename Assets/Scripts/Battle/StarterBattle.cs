@@ -22,11 +22,11 @@ sealed public class StarterBattle
         if (monsterBattleData.Monsters.Length > _maxCount)
             throw new InvalidOperationException("Монстров больше максимального количества. Максимальное количество:" + _maxCount);
 
-        PlayerBattleData playerBattleData = ServiceLocator.Current.GetService<PlayerDataService>().BattleData;
+        //PlayerBattleData playerBattleData = ServiceLocator.Current.GetService<PlayerDataService>().BattleData;
 
-        BattleStartedContextData battleStartedContext = new BattleStartedContextData(new BattleData(playerBattleData, monsterBattleData));
+        //BattleStartedContextData battleStartedContext = new BattleStartedContextData(new BattleData(playerBattleData, monsterBattleData));
 
-        _gameContext.WriteContext(battleStartedContext);
+        //_gameContext.WriteContext(battleStartedContext);
         _sceneTransitionController.Transition(_battleScene);
     }
 }

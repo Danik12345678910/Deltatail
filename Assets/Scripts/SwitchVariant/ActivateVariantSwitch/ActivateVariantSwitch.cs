@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using Zenject;
 
 abstract public class ActivateVariantSwitch : MonoBehaviour, IActivatableVariantSwitch
 {
     abstract protected Variant[] Variants { get; }
+    
+    private VariantHandlerController _controller;
 
-    public void ActivateVariantSwitcherController()
-    {
-        var variantHandler = ServiceLocator.Current.GetService<VariantHandlerController>();
-        variantHandler.StartHandler(Variants);
-    }
+    [Inject]
+    private void Initialize(VariantHandlerController controller) => _controller = controller;
+
+    public void ActivateVariantSwitcherController() => _controller.StartHandler(Variants);
 }

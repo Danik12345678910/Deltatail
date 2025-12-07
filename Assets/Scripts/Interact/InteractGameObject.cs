@@ -6,16 +6,22 @@ abstract public class InteractGameObject : MonoBehaviour
 {
     private bool _isInteracting;
     private int _currentInteractionIndex;
-    
+
     [SerializeReference, SubclassSelector] private InteractionActionEndingHandler[] _actions;
 
     private EventBus _eventBus;
+    private PlayerDataService _playerDataService;
 
     protected PlayerTouchCurrentGameObjectDetect _touchDetect;
 
     [Inject]
-    private void Initialize(EventBus eventBus) => _eventBus = eventBus;
-     
+    private void Initialize(EventBus eventBus, PlayerDataService playerDataService)
+    {
+
+        _eventBus = eventBus;
+        _playerDataService = playerDataService;
+    }
+
     protected virtual void Awake()
     {
         _touchDetect = GetComponent<PlayerTouchCurrentGameObjectDetect>();
@@ -31,19 +37,19 @@ abstract public class InteractGameObject : MonoBehaviour
         foreach (var action in _actions)
             action.OnEndingAction += DisableAction;
 
-        _touchDetect.Initialize(ServiceLocator.Current.GetService<PlayerDataService>().gameObject);
+        _touchDetect.Initialize(_playerDataService.GameObject);
     }
 
     protected void Interact()
     {
-        if(!_isInteracting)
+        if (!_isInteracting)
         {
             EnableAction();
 
             _actions[_currentInteractionIndex].Action();
             _eventBus.Invoke(new InteractSignal());
 
-            if(_currentInteractionIndex < _actions.Length - 1)
+            if (_currentInteractionIndex < _actions.Length - 1)
                 _currentInteractionIndex++;
         }
     }
@@ -55,7 +61,7 @@ abstract public class InteractGameObject : MonoBehaviour
 
     private void DisableAction()
     {
-        _isInteracting = false;   
+        _isInteracting = false;
     }
 
     protected virtual void OnDestroy()

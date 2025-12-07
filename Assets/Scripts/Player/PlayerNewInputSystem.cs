@@ -10,12 +10,11 @@ sealed public class PlayerNewInputSystem : MonoBehaviour
     [Inject]
     private void Initialize(InputSystem_Actions actions)
     {
-        _controller = GetComponent<PlayerMovementController>();
         _action = actions;
 
         _action.Player.Movement.performed += _ => _controller.Move(_.ReadValue<Vector2>());
         _action.Player.Movement.canceled += _ => _controller.StopMove();
     }
 
-    private void OnDestroy() => _action?.Disable();
+    private void Awake() => _controller = GetComponent<PlayerMovementController>();
 }
