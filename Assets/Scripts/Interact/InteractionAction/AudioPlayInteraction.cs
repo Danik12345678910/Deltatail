@@ -17,8 +17,10 @@ public class AudioPlayInteraction : InteractionActionEndingHandler
     private Audio _audio;
     private AudioController _audioController;
 
-    [Inject]
-    private void Initialize(AudioController audioController) => _audioController = audioController;
+    public override void Initialize(InteractDependencyPack pack)
+    {
+        _audioController = pack.Get<AudioController>();
+    }
 
     public override void Start()
     {

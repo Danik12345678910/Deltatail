@@ -10,11 +10,11 @@ public class PlayerDataService : MonoBehaviour
     public GameObject GameObject { get; private set; }
     public Rigidbody2D Rigidbody2D { get; private set; }
 
-    [Inject]
-    private void Initialize(PlayerBattleData battleData)
-    {
-        BattleData = battleData;
-    }
+    //[Inject]
+    //private void Initialize(PlayerBattleData battleData)
+    //{
+    //    BattleData = battleData;
+    //}
 
 
     private void Awake()

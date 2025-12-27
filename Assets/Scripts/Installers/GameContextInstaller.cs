@@ -3,5 +3,5 @@ using Zenject;
 
 public class GameContextInstaller : MonoInstaller
 {
-    public override void InstallBindings() => Container.Bind<GameContext>();
+    public override void InstallBindings() => Container.Bind<GameContext>().AsSingle();
 }
