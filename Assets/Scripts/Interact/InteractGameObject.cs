@@ -11,13 +11,14 @@ abstract public class InteractGameObject : MonoBehaviour
 
     private EventBus _eventBus;
     private PlayerDataService _playerDataService;
+    private InteractDependencyPack _pack;
 
     protected PlayerTouchCurrentGameObjectDetect _touchDetect;
 
     [Inject]
-    private void Initialize(EventBus eventBus, PlayerDataService playerDataService)
+    private void Initialize(EventBus eventBus, PlayerDataService playerDataService, InteractDependencyPack pack)
     {
-
+        _pack = pack;
         _eventBus = eventBus;
         _playerDataService = playerDataService;
     }
@@ -31,6 +32,9 @@ abstract public class InteractGameObject : MonoBehaviour
 
     protected virtual void Start()
     {
+        foreach (var action in _actions)
+            action.Initialize(_pack);
+
         foreach (var action in _actions)
             action.Start();
 

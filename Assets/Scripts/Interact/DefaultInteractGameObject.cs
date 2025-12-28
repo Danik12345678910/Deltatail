@@ -1,4 +1,4 @@
-﻿public class DefaultInteractGameObject : InteractGameObject
+﻿public sealed class DefaultInteractGameObject : InteractGameObject
 {
     protected override void Start()
     {
