@@ -17,7 +17,10 @@ sealed public class PlayerMovementController : MonoBehaviour
 
 
     [Inject]
-    private void Initialize(EventBus eventBus) => _eventBus = eventBus;
+    private void Initialize(EventBus eventBus)
+    {
+        _eventBus = eventBus;
+    }
 
     public void LockMove()
     {
@@ -31,6 +34,7 @@ sealed public class PlayerMovementController : MonoBehaviour
 
     private void Start()
     {
+
         _eventBus.Subscribe<DialogStartedSignal>(OnDialogStarted);
         _eventBus.Subscribe<DialogEndedSignal>(OnDialogEnded);
     }

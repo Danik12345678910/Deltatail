@@ -10,10 +10,9 @@ public class DelayActionInteraction : InteractionActionEndingHandler
     private ControllerCoroutine _starterCoroutine;
     [SerializeField, Min(0)] float _delayTimeInSeconds;
 
-    public override void Initialize(InteractDependencyPack pack)
-    {
-        _starterCoroutine = pack.Get<ControllerCoroutine>();
-    }
+    [Inject]
+    private void Init(ControllerCoroutine starterCoroutine) => _starterCoroutine = starterCoroutine;
+
     public override void Action() => _starterCoroutine.StartCoroutine(DelayCoroutine());
 
     private IEnumerator DelayCoroutine()

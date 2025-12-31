@@ -7,9 +7,7 @@ public class Test : MonoBehaviour
     [SerializeField] private MainPersonDialogData _two;
 
     [Inject]
-    private IDialogStartable<DialogData> _controller;
-    [Inject]
-    private IDialogStartable<MainPersonDialogData> _controller2;
+    private DialogController _controller;
 
 
     private void Update()
@@ -17,6 +15,6 @@ public class Test : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
             _controller.StartDialog(_first);
         else if (Input.GetKeyDown(KeyCode.S))
-            _controller2.StartDialog(_two);
+            _controller.StartDialog(_two);
     }
 }

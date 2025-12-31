@@ -9,7 +9,7 @@ sealed internal class Bootstrap : MonoBehaviour
     [Inject]
     private void Initialize(IStartable[] startables) => _startables = startables;
 
-    private void Start()
+    private void OnDestroy()
     {
         _startables = _startables.OrderBy(startable => startable.Priority).ToArray();
 

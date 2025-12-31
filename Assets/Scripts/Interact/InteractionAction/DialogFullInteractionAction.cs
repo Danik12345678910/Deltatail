@@ -14,10 +14,11 @@ sealed public class DialogFullInteractionAction : InteractionActionEndingHandler
 
     public override event Action OnEndingAction;
 
-    override public void Initialize(InteractDependencyPack pack)
+    [Inject]
+    private void Initialize(IDialogStartable<MainPersonDialogData> mainPersonDialogStartable, EventBus eventBus)
     {
-        _mainPersonDialogStartable = pack.Get<IDialogStartable<MainPersonDialogData>>();
-        _eventBus = pack.Get<EventBus>();
+        _mainPersonDialogStartable = mainPersonDialogStartable;
+        _eventBus = eventBus;
     }
 
     public override void Start()
@@ -31,9 +32,6 @@ sealed public class DialogFullInteractionAction : InteractionActionEndingHandler
             return;
 
         _isSubscribed = true;
-
-        Debug.Log(_mainPersonDialogStartable);
-        Debug.Log(_eventBus);
 
         _eventBus.Subscribe<DialogEndedSignal>(EndAction);
         _eventBus.Subscribe<DialogEndedSignal>(SubscribeHandler);
