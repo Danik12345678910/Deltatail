@@ -1,10 +1,11 @@
 using UnityEngine;
 using Zenject;
 
-public class EventBusInstaller : MonoInstaller
+public sealed class EventBusInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
+        Debug.Log("Инциализирован!");
         Container.Bind<EventBus>().AsSingle();
     }
 }

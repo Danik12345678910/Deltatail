@@ -10,17 +10,18 @@ abstract public class InteractGameObject : MonoBehaviour
     [SerializeReference, SubclassSelector] private InteractionActionEndingHandler[] _actions;
 
     private EventBus _eventBus;
-    private PlayerDataService _playerDataService;
+    private PlayerData _playerDataService;
     private InteractDependencyPack _pack;
 
     protected PlayerTouchCurrentGameObjectDetect _touchDetect;
 
     [Inject]
-    private void Initialize(EventBus eventBus, PlayerDataService playerDataService, InteractDependencyPack pack)
+    private void Initialize(EventBus eventBus, PlayerData playerDataService, ControllerCoroutine controllerCoroutine, AudioController audioController, IDialogStartable<DialogData> dialogStartable, IDialogStartable<MainPersonDialogData> mainPersonDialogStartable)
     {
-        _pack = pack;
         _eventBus = eventBus;
         _playerDataService = playerDataService;
+        Debug.Log(((IDialogStartable<MainPersonDialogData>)mainPersonDialogStartable).GetType().Name + " " + dialogStartable.GetType().Name);
+        _pack = new InteractDependencyPack(Bind.As(_eventBus), Bind.As(controllerCoroutine), Bind.As(audioController), Bind.As(dialogStartable), Bind.As(mainPersonDialogStartable));
     }
 
     protected virtual void Awake()

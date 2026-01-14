@@ -14,11 +14,10 @@ sealed public class DialogFullInteractionAction : InteractionActionEndingHandler
 
     public override event Action OnEndingAction;
 
-    [Inject]
-    private void Initialize(IDialogStartable<MainPersonDialogData> mainPersonDialogStartable, EventBus eventBus)
+    public override void Initialize(InteractDependencyPack pack)
     {
-        _mainPersonDialogStartable = mainPersonDialogStartable;
-        _eventBus = eventBus;
+        _mainPersonDialogStartable = pack.Get<IDialogStartable<MainPersonDialogData>>();
+        _eventBus = pack.Get<EventBus>();   
     }
 
     public override void Start()

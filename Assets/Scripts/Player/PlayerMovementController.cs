@@ -8,7 +8,7 @@ sealed public class PlayerMovementController : MonoBehaviour
     
     [Header("Параметры передвижения игрока")]
 
-    [SerializeField] private PlayerDataService _playerData;
+    [SerializeField] private PlayerData _playerData;
     [SerializeField] private float _speed;
 
     [Space(), Header("Параметры анимации")]
@@ -16,16 +16,17 @@ sealed public class PlayerMovementController : MonoBehaviour
     [SerializeField] private PlayerAnimation _playerAnimation;
 
 
-    [Inject]
-    private void Initialize(EventBus eventBus)
-    {
-        _eventBus = eventBus;
-    }
 
     public void LockMove()
     {
         StopMove();
         _moveIsLock = true;
+    }
+    [Inject]
+    private void Construct(EventBus eventBus)
+    {
+        Debug.Log(eventBus+ " Инциализирован!");
+        _eventBus = eventBus;
     }
     public void UnlockMove() => _moveIsLock = false;
 
@@ -34,6 +35,7 @@ sealed public class PlayerMovementController : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Start Player called");
 
         _eventBus.Subscribe<DialogStartedSignal>(OnDialogStarted);
         _eventBus.Subscribe<DialogEndedSignal>(OnDialogEnded);

@@ -12,8 +12,11 @@ public class DialogTextOnlyInteractionAction : InteractionActionEndingHandler
     private IDialogStartable<DialogData> _dialogStartable;
     private EventBus _eventBus;
 
-    [Inject]
-    private void Initialize(EventBus eventBus) => _eventBus = eventBus;
+    public override void Initialize(InteractDependencyPack pack)
+    {
+        _dialogStartable = pack.Get<IDialogStartable<DialogData>>();
+        _eventBus = pack.Get<EventBus>();
+    }
 
     public override event System.Action OnEndingAction;
 

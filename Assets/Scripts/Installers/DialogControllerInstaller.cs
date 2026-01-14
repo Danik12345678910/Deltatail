@@ -36,7 +36,6 @@ namespace Assets.Scripts.Installers
                 _dictorLeftPrefix,
                 _dictorRightPrefix
             );
-
             Container.BindInterfacesTo<DialogController>().AsSingle().WithArguments(config);
         }
     }

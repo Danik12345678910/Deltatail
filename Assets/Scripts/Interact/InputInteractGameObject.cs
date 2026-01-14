@@ -1,8 +1,19 @@
-﻿public class InputInteractGameObject : InteractGameObject
+﻿using System.Runtime.InteropServices;
+using Zenject;
+
+public class InputInteractGameObject : InteractGameObject
 {
     private IInteractInput _interactInput;
     private bool _isPlayerCollision;
 
+    [Inject]
+    private void Construct(IInteractInput interactInput)
+    {
+        _interactInput = interactInput;
+        _interactInput.OnInput += InteractCollisionPlayerCheck;
+        _touchDetect.OnCollisionEnter += SetIsPlayerCollision;
+        _touchDetect.OnCollisionExit += UnsetIsPlayerCollision;
+    }
     private void SetIsPlayerCollision()
     {
         _isPlayerCollision = true;
@@ -29,16 +40,5 @@
         _interactInput.OnInput -= InteractCollisionPlayerCheck;
         _touchDetect.OnCollisionEnter -= SetIsPlayerCollision;
         _touchDetect.OnCollisionExit -= UnsetIsPlayerCollision;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        _interactInput = ServiceLocator.Current.GetService<IInteractInput>();
-        _interactInput.OnInput += InteractCollisionPlayerCheck;
-
-        _touchDetect.OnCollisionEnter += SetIsPlayerCollision;
-        _touchDetect.OnCollisionExit += UnsetIsPlayerCollision;
     }
 }
