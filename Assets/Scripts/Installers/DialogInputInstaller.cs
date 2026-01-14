@@ -7,7 +7,7 @@ sealed public class DialogInputInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        if(!_onlySkipDialog)
+        if (!_onlySkipDialog)
             Container.Bind<IAllWritingPage>().To<NewInputSystemWriteAllDialogPage>().AsSingle();
         
         Container.Bind<ISkipDialogPage>().To<NewInputSystemSkipDialog>().AsSingle();

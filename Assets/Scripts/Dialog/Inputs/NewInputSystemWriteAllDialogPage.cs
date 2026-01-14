@@ -4,7 +4,9 @@ sealed public class NewInputSystemWriteAllDialogPage : IAllWritingPage
 
     readonly private InputSystem_Actions _inputs;
 
-    public NewInputSystemWriteAllDialogPage(InputSystem_Actions inputs) => _inputs = inputs;     
-
-    public void Enable() => _inputs.Dialog.WritingAllDialog.performed += _ => OnWriteAllDialogPage.Invoke();
+    public NewInputSystemWriteAllDialogPage(InputSystem_Actions inputs)
+    {
+        _inputs = inputs; 
+        _inputs.Dialog.WritingAllDialog.performed += _ => OnWriteAllDialogPage.Invoke();
+    }
 }

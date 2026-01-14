@@ -884,7 +884,6 @@ GameObject:
   m_Component:
   - component: {fileID: 689395225}
   - component: {fileID: 689395224}
-  - component: {fileID: 689395223}
   m_Layer: 0
   m_Name: UnityLifeCycle
   m_TagString: Untagged
@@ -892,18 +891,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &689395223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 689395222}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0bdc76106e6fe7448f0fef7d9f4ac57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &689395224
 MonoBehaviour:
   m_ObjectHideFlags: 0
